@@ -56,6 +56,27 @@ export async function getUserInfo() {
 	return response;
 }
 
+
+// 创建门店经理订单
+export async function managerOrder (datas) {
+	console.log(datas);
+	try{
+		let response = await request.post('manager',{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			},
+			data: {
+				captcha_key: datas.captcha_key,
+				captcha_code: datas.captcha_code
+			}
+		})
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e)
+	}
+}
+
 // 获取验证码
 export async function managerCaptcha() {
 	try{

@@ -22,7 +22,8 @@
 
 <script>
 	import {
-		managerCaptcha
+		managerCaptcha,
+		managerOrder
 	} from '../../utils/api.js'
 	export default {
 		data() {
@@ -49,9 +50,10 @@
 				}
 				this.dialogModal = 'show';
 			},
-			hideModal() {
+			async hideModal() {
 				this.dialogModal = false
 				// 创建订单
+				let orderResponse = await managerOrder({captcha_key: this.captcha.key,captcha_code:this.captchaCode});
 			},
 			getCaptchaCode() {
 
