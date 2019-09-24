@@ -1,10 +1,22 @@
 <template>
 	<view>
-		<view class="cu-bar bg-white tabbar border foot">
+		<view v-if="type == 'store'">
+			门店经理介绍信息
+		</view>
+		<view v-if="type == 'player'">
+			酱紫玩家介绍信息
+		</view>
+		
+		<!-- 未购买 购买按钮 -->
+		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'CanBePurchased'">
 			<view class="bg-red submit" @tap="showModal()">立即订购</view>
 		</view>
+		<!-- 已购买 审核中 -->
+		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'UndeReview'">
+			<view class="bg-red submit">{{tip}}</view>
+		</view>
 
-		<view class="cu-modal" :class="dialogModal">
+		<view class="cu-modal" :class="dialogModal" style="z-index: 900;">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-f06c7a justify-end">
 					<input class="basis-lg" placeholder="请输入验证码" v-model="captchaCode" placeholder-style="color: rgba(255,255,255,0.8);" />
@@ -23,7 +35,8 @@
 <script>
 	import {
 		orderaptcha,
-		memberOrder
+		memberOrder,
+		getMemberOrderInfo,
 	} from '../../utils/api.js'
 	export default {
 		data() {
@@ -31,16 +44,41 @@
 				dialogModal: false,
 				captchaCode: "",
 				captcha: {},
-				type: 'store'
+				type: 'store',
+				memberOrderInfo: {},
+				memberOrderStatus: 'NotBuying',
+				tip: '11'
 			}
 		},
-		onLoad() {
-			this.type = RouterOptions.query.type;
+		async onLoad(RouterOptions) {
+			// 获取选择的类型
+			this.type = RouterOptions.type;
+			
+			// 获取会员订单信息
+			let memberOrderInfoResponse = await getMemberOrderInfo();
+			
+			// 获取成功
+			if(memberOrderInfoResponse.statusCode === 200){
+				this.memberOrderInfo = memberOrderInfoResponse.data;
+			}
+			// 当前用户没有会员类型订单，可以购买
+			if(!this.memberOrderInfo){
+				this.memberOrderStatus = 'CanBePurchased';
+			}
+			// 当前用户有会员订单
+			if(this.memberOrderInfo && this.memberOrderInfo.pay_status == 'unpaid'){
+				this.tip = this.memberOrderInfo.type == 'player' ? '您已购买酱紫玩家，审核中' : '您已购买门店经理，审核中';
+				this.memberOrderStatus = 'UndeReview';
+			}
+			
+		},
+		onShow() {
+			
 		},
 		methods: {
 			async showModal() {
 				console.log('打开模态窗');
-				// 判断用用户的状态
+				// 获取验证码
 				let captchaResponse = await orderaptcha();
 				// 创建验证码成功
 				if(captchaResponse.statusCode === 201){
@@ -53,16 +91,32 @@
 				this.dialogModal = 'show';
 			},
 			async hideModal() {
-				this.dialogModal = false
 				// 创建订单
 				let orderResponse = await memberOrder({
 					captcha_key: this.captcha.key,
 					captcha_code:this.captchaCode,
 					type: this.type
 				});
+				
+				// 订单创建成功
+				if(orderResponse.statusCode === 201){
+					this.memberOrderInfo = orderResponse.data;
+					this.memberOrderStatus = 'UndeReview';
+					this.tip = orderResponse.data.type == 'player' ? '您已购买酱紫玩家，审核中' : '您已购买门店经理，审核中';
+					this.dialogModal = false;
+				}
 			},
-			getCaptchaCode() {
-
+			async getCaptchaCode() {
+				// 获取验证码
+				let captchaResponse = await orderaptcha();
+				// 创建验证码成功
+				if(captchaResponse.statusCode === 201){
+					this.captcha = {
+						key: captchaResponse.data.captcha_key,
+						imageContent: captchaResponse.data.captcha_image_content,
+						expiredAt: Date.parse(captchaResponse.data.expired_at)
+					}
+				}
 			}
 		}
 	}
