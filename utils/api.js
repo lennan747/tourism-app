@@ -57,11 +57,11 @@ export async function getUserInfo() {
 }
 
 
-// 创建门店经理订单
-export async function managerOrder (datas) {
+// 创建会员订单
+export async function memberOrder (datas) {
 	console.log(datas);
 	try{
-		let response = await request.post('manager',{
+		let response = await request.post('order/store-member',{
 			header: {
 				'Authorization': 'Bearer ' + await getToken()
 			},
@@ -71,16 +71,16 @@ export async function managerOrder (datas) {
 			}
 		})
 		return response;
-	}catch(e){
+	}catch(e){catch
 		//TODO handle the exception
 		console.log(e)
 	}
 }
 
-// 获取验证码
-export async function managerCaptcha() {
+// 获取订单验证码
+export async function orderaptcha() {
 	try{
-		let response = await request.get('manager/captcha', {
+		let response = await request.get('order/captcha', {
 			header: {
 				'Authorization': 'Bearer ' + await getToken()
 			}

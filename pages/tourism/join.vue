@@ -22,24 +22,26 @@
 
 <script>
 	import {
-		managerCaptcha,
-		managerOrder
+		orderaptcha,
+		memberOrder
 	} from '../../utils/api.js'
 	export default {
 		data() {
 			return {
 				dialogModal: false,
 				captchaCode: "",
-				captcha: {}
+				captcha: {},
+				type: 'store'
 			}
 		},
 		onLoad() {
+			this.type = RouterOptions.query.type;
 		},
 		methods: {
 			async showModal() {
 				console.log('打开模态窗');
 				// 判断用用户的状态
-				let captchaResponse = await managerCaptcha();
+				let captchaResponse = await orderaptcha();
 				// 创建验证码成功
 				if(captchaResponse.statusCode === 201){
 					this.captcha = {
@@ -53,7 +55,11 @@
 			async hideModal() {
 				this.dialogModal = false
 				// 创建订单
-				let orderResponse = await managerOrder({captcha_key: this.captcha.key,captcha_code:this.captchaCode});
+				let orderResponse = await memberOrder({
+					captcha_key: this.captcha.key,
+					captcha_code:this.captchaCode,
+					type: this.type
+				});
 			},
 			getCaptchaCode() {
 
