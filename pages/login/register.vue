@@ -46,6 +46,7 @@
 
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
+	import { registercaptcha,verificationCodes,register } from '../../utils/api.js'
 	export default {
 		data() {
 			return {
@@ -138,15 +139,7 @@
 					});
 					// 从缓存中获取上一级，不存在给0
 					let parent_id = uni.getStorageSync('parent_id') || "";
-					let registerResponse = await this.$request.post('users',{
-						data: {
-							parent_id: parent_id,
-							password: this.passwd,
-							verification_key: this.verificationCode.key,
-							verification_code: this.code
-						}
-					})
-					console.log(registerResponse);
+					let registerResponse = await register({parent_id: parent_id,password: this.passwd,verification_key: this.verificationCode.key,verification_code: this.code})
 					if (registerResponse.statusCode === 422) {
 						uni.showToast({
 							title: '验证码已失效',
@@ -183,12 +176,7 @@
 			// 获取手机验证码
 			async sendPhoneCode() {
 				try {
-					let phoneCodeResponse = await this.$request.post('verificationCodes', {
-						data: {
-							captcha_key: this.captcha.key,
-							captcha_code: this.captchaCode
-						}
-					})
+					let phoneCodeResponse = await verificationCodes({captcha_key: this.captcha.key,captcha_code: this.captchaCode})
 					console.log(phoneCodeResponse);
 					if (phoneCodeResponse.statusCode === 401) {
 						uni.showToast({
@@ -246,11 +234,8 @@
 					});
 
 					// 获取验证码数据
-					let captchaRespon = await this.$request.post('captchas', {
-						data: {
-							phone: this.phoneNumber
-						}
-					})
+					let captchaRespon = await registercaptcha({phoneNumber: this.phoneNumber});
+					
 					console.log(captchaRespon);
 					
 					// 验证错误

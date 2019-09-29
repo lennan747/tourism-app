@@ -24,7 +24,7 @@ request.interceptors.response(res => {
 	uni.hideLoading();
 	
 	// 401 验证失败
-	if (res.statusCode === 401) {
+	if (res.statusCode === 401 || res.statusCode === 422) {
 		uni.showToast({
 			title: res.data.message,
 			icon: "none"
@@ -41,17 +41,29 @@ export function setParent(parentId) {
 	return uni.setStorageSync('parent_id', parentId)
 }
 
-
-// 获取用户信息
-export async function getUserInfo() {
-	let response = await this.$request.get('user', {
+// 获取会员订单
+export async function getMemberOrderInfo () {
+	let response = await request.get('user/member/order/info',{
 		header: {
-			'Authorization': 'Bearer ' + getToken()
+			'Authorization': 'Bearer ' + await getToken()
 		}
 	})
 	
+	return response;
+}
+
+
+// 获取用户信息
+export async function getUserInfo() {	
+	let response = await request.get('user', {
+		header: {
+			'Authorization': 'Bearer ' + await getToken()
+		}
+	})
+	
+	// 成功
 	if(response.statusCode === 200){
-		
+		uni.setStorageSync('user_info',response.data)
 	}
 	return response;
 }
@@ -67,7 +79,8 @@ export async function memberOrder (datas) {
 			},
 			data: {
 				captcha_key: datas.captcha_key,
-				captcha_code: datas.captcha_code
+				captcha_code: datas.captcha_code,
+				type: datas.type
 			}
 		})
 		return response;
@@ -160,4 +173,54 @@ export async function refreshToken(accessToken) {
 	}
 
 	return response;
+}
+
+export async function register (datas) {
+	try{
+		let response = await request.post('users', {
+			data: {
+				parent_id: datas.parent_id,
+				password: datas.password,
+				verification_key: datas.verification_key,
+				verification_code: datas.verification_code
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+
+export async function verificationCodes (datas) {
+	try{
+		let response = await request.post('verificationCodes', {
+			data: {
+				captcha_key: datas.captcha_key,
+				captcha_code: datas.captcha_code
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+
+// 获取图片注册验证码
+export async function registercaptcha (datas) {
+	try{
+		let response = await request.post('captchas', {
+			data: {
+				phone: datas.phoneNumber
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
 }

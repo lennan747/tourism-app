@@ -30,10 +30,11 @@
 			// 获取pid
 			try {
 				let query_pid = RouterOptions.query.pid;
+				console.log(query_pid);
 				let storage_pid = uni.getStorageSync('parent_id');
 				if (!storage_pid && query_pid) {
 					console.log('no parent, need save!');
-					uni.setStorageSync('parent_id', parentId)
+					uni.setStorageSync('parent_id', query_pid)
 				}
 				// 判断登录状态
 				let token = uni.getStorageSync('access_token') || '';

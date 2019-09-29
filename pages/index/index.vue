@@ -27,19 +27,25 @@
 </template>
 
 <script>
+	import { getUserInfo } from '../../utils/api.js'
+	import { mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
 				PageCur: 'tourism',
+				UserInfo: {}
 			}
 		},
-		onLoad() {
+		async onLoad() {
 			//
-			console.log('index onload');
-			// 获取用户信息
+			let userResponse = await getUserInfo();
+			if(userResponse.statusCode === 200){
+				this.UserInfo = userResponse.data
+			}
 			
 		},
 		methods: {
+			...mapMutations(['user']),
 			NavChange: function(e) {
 				this.PageCur = e.currentTarget.dataset.cur
 			},
