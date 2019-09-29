@@ -71,7 +71,7 @@ export async function memberOrder (datas) {
 			}
 		})
 		return response;
-	}catch(e){catch
+	}catch(e){
 		//TODO handle the exception
 		console.log(e)
 	}

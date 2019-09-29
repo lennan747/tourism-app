@@ -34,8 +34,8 @@
 				type: 'store'
 			}
 		},
-		onLoad() {
-			this.type = RouterOptions.query.type;
+		onLoad(RouterOptions) {
+			this.type = RouterOptions.type;
 		},
 		methods: {
 			async showModal() {
