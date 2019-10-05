@@ -42,14 +42,34 @@ export function setParent(parentId) {
 }
 
 export async function getProductsOfDetails (datas) {
-	let response = await request.get('products/show',{
-		data: {
-			id: datas.id ? datas.id : 1
-		}
-	})
+	let response = await request.get('products/'+ datas.id + '?include=sku')
 	
 	return response;
 }
+
+// 创建旅游订单
+export async function productOrder (datas) {
+	console.log(datas);
+	try{
+		let response = await request.post('order/store-product',{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			},
+			data: {
+				captcha_key: datas.captcha_key,
+				captcha_code: datas.captcha_code,
+				type: datas.type,
+				sku_id: datas.sku_id,
+				amount: datas.amount
+			}
+		})
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e)
+	}
+}
+
 
 // 获取推荐商品
 export async function getProductsOfRecommend (datas) {
@@ -61,8 +81,6 @@ export async function getProductsOfRecommend (datas) {
 	
 	return response;
 }
-
-
 
 // 获取会员订单
 export async function getMemberOrderInfo () {

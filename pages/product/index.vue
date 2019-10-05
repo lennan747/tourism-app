@@ -17,9 +17,18 @@
 			<view class="text-left text-sm padding-top-sm padding-left padding-bottom-sm">销量{{ product.sold_count }}</view>
 		</view>
 		<view class="bg-white margin">
+			
+			<view class="cu-form-group">
+				<view class='padding-sm flex flex-wrap'>
+					<view class="padding-xs" v-for="(item,index) in SkuList" :key="index">
+						<view class='cu-tag' :class="'line-red'" @tap="checkSku" :data-sku="item.id" :data-name="item.title" :data-price="item.price">{{item.title}}</view>
+					</view>
+				</view>
+			</view>
+			
 			<view class="cu-form-group">
 				<view class="title">出发地点</view>
-				<input placeholder="输入框出发地点" name="input"></input>
+				<input placeholder="输入框出发地点" name="input" v-model="location"></input>
 				<!-- <text class='cuIcon-locationfill text-orange'></text> -->
 			</view>
 			
@@ -67,7 +76,7 @@
 <script>
 	import {
 		orderaptcha,
-		memberOrder,
+		productOrder,
 		getProductsOfDetails,
 	} from '../../utils/api.js'
 	export default {
@@ -84,7 +93,11 @@
 					'title': null
 				},
 				swiperList: [],
-				tabList: {}
+				tabList: {},
+				SkuList: [],
+				SkuId: null,
+				amount: 1,
+				location: ''
 			}
 		},
 		async onLoad(RouterOptions) {
@@ -104,7 +117,10 @@
 					{title: '行程详情','content': productResponse.data.journey_detail},
 					{title: '价格详情','content': productResponse.data.cost_detail}
 				]
-				console.log(this.tabList);
+				this.SkuList = productResponse.data.sku.data
+				this.product.title = this.SkuList[0].title;
+				this.product.price = this.SkuList[0].price;
+				this.SkuId = this.SkuList[0].id;
 			}
 			
 			this.TowerSwiper('swiperList');
@@ -116,6 +132,12 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			checkSku(e) {
+				console.log(e);
+				this.product.title = e.target.dataset.name;
+				this.product.price = e.target.dataset.price;
+				this.SkuId = e.target.dataset.sku;
 			},
 			DateChange(e) {
 				this.date = e.detail.value
@@ -136,6 +158,25 @@
 			},
 			async showModal() {
 				console.log('打开模态窗');
+				// 验证表单提交信息
+				if(!this.SkuId){
+					uni.showToast({
+						title: '请选择商品',
+						icon: "none"
+					});
+					
+					return false;
+				}
+				
+				if(!this.location){
+					uni.showToast({
+						title: '请填写出发地点',
+						icon: "none"
+					});
+					
+					return false;
+				}
+				
 				// 获取验证码
 				let captchaResponse = await orderaptcha();
 				// 创建验证码成功
@@ -150,10 +191,12 @@
 			},
 			async hideModal() {
 				// 创建订单
-				let orderResponse = await memberOrder({
+				let orderResponse = await productOrder({
 					captcha_key: this.captcha.key,
 					captcha_code:this.captchaCode,
-					type: this.type
+					type: 'product',
+					sku_id: this.SkuId,
+					amount: this.amount
 				});
 				
 				// 订单创建成功
