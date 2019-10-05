@@ -64,6 +64,7 @@
 			if(memberOrderInfoResponse.statusCode === 200){
 				this.memberOrderInfo = memberOrderInfoResponse.data;
 			}
+			
 			// 当前用户没有会员类型订单，可以购买
 			if(!this.memberOrderInfo){
 				this.memberOrderStatus = 'CanBePurchased';

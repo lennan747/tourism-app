@@ -41,6 +41,29 @@ export function setParent(parentId) {
 	return uni.setStorageSync('parent_id', parentId)
 }
 
+export async function getProductsOfDetails (datas) {
+	let response = await request.get('products/show',{
+		data: {
+			id: datas.id ? datas.id : 1
+		}
+	})
+	
+	return response;
+}
+
+// 获取推荐商品
+export async function getProductsOfRecommend (datas) {
+	let response = await request.get('products/recommend',{
+		data: {
+			page: datas.page ? datas.page : 1
+		}
+	})
+	
+	return response;
+}
+
+
+
 // 获取会员订单
 export async function getMemberOrderInfo () {
 	let response = await request.get('user/member/order/info',{

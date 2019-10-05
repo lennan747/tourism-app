@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<tourism v-if="PageCur=='tourism'"></tourism>
+		<tourism v-if="PageCur=='tourism'" :products="Products" :elements="Elements"></tourism>
 		<team v-if="PageCur=='team'"></team>
 		<user v-if="PageCur=='user'"></user>
 		<view class="cu-bar tabbar bg-white shadow foot">
@@ -27,28 +27,50 @@
 </template>
 
 <script>
-	import { getUserInfo } from '../../utils/api.js'
+	import { getUserInfo,getProductsOfRecommend } from '../../utils/api.js'
 	import { mapMutations } from 'vuex'
 	export default {
-		data() {
-			return {
-				PageCur: 'tourism',
-				UserInfo: {}
-			}
-		},
-		async onLoad() {
-			//
-			let userResponse = await getUserInfo();
-			if(userResponse.statusCode === 200){
-				this.UserInfo = userResponse.data
-			}
-			
-		},
 		methods: {
 			...mapMutations(['user']),
 			NavChange: function(e) {
 				this.PageCur = e.currentTarget.dataset.cur
 			},
+		},
+		data() {
+			return {
+				PageCur: 'tourism',
+				UserInfo: {},
+				Products: [],
+				Elements: [{
+						title: '门店经理',
+						name: '￥3980',
+						color: 'cyan',
+						cuIcon: 'selection',
+						type: 'store'
+					},
+					{
+						title: '酱紫玩家',
+						name: '￥999',
+						color: 'blue',
+						cuIcon: 'group',
+						type: 'player'
+					}
+				]
+			}
+		},
+		async onLoad() {
+			// 获取用户信息
+			let userResponse = await getUserInfo();
+			if(userResponse.statusCode === 200){
+				this.UserInfo = userResponse.data
+			}
+			
+			// 获取首页信息
+			let recommendResponse = await getProductsOfRecommend({page:1})
+			if(recommendResponse.statusCode === 200){
+				console.log(recommendResponse.data);
+				this.Products = recommendResponse.data.data
+			}
 		}
 	}
 </script>

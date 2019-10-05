@@ -24,37 +24,15 @@
 					<text class="cuIcon-title text-blue"></text>旅游
 				</view>
 			</view>
-			<view class="padding-lr-xl text-center">
-				<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" 
-				style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg);">
-					<view>泰国七日游</view>
-				</view>
-			</view>
-			<view class="padding-lr-xl text-center">
-				<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" 
-				style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg);">
-					<view>泰国七日游</view>
-				</view>
-			</view>
-			<view class="padding-lr-xl text-center">
-				<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" 
-				style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg);">
-					<view>泰国七日游</view>
-				</view>
-			</view>
-			<view class="padding-lr-xl text-center">
-				<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" 
-				style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg);">
-					<view>泰国七日游</view>
-				</view>
-			</view>
-			<view class="padding-lr-xl text-center">
-				<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" 
-				style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big91005.jpg);">
-					<view>泰国七日游</view>
-				</view>
-			</view>
 			
+			<view class="padding-lr-xl text-center" v-for="(item,index) in products">
+				<navigator :url="'/pages/product/index?id=' + item.id"  navigateTo :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]">
+					<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" :style="{'background-image':'url('+item.index_image+')'}">
+						<view>{{item.description}}</view>
+					</view>
+				</navigator>
+			</view>
+		
 			<view class="cu-tabbar-height"></view>
 		</scroll-view>
 	</view>
@@ -63,23 +41,9 @@
 <script>
 	export default {
 		name: "basics",
+		props: ['products','elements'],
 		data() {
 			return {
-				elements: [{
-						title: '门店经理',
-						name: '￥3980',
-						color: 'cyan',
-						cuIcon: 'selection',
-						type: 'store'
-					},
-					{
-						title: '酱紫玩家',
-						name: '￥999',
-						color: 'blue',
-						cuIcon: 'group',
-						type: 'player'
-					}
-				],
 			};
 		},
 		onShow() {
