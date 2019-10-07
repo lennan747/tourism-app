@@ -3,23 +3,39 @@
 		<view class="bg-img padding-sm" style="background-image: url('/static/componentBg.png')">
 			<view class="flex justify-center padding-bottom-sm">
 				<view class="padding-sm">
-					<view class="bg-gradual-green padding radius text-center shadow-blur">
+					<view class="bg-gradual-blue padding radius text-center shadow-blur">
 						<view class="text-sm">普通客户</view>
 						<view class="margin-top-sm text-Abc">29</view>
 					</view>
 				</view>
+				
 				<view class="padding-sm">
-					<view class="bg-gradual-blue padding radius text-center shadow-blur">
+					<view class="bg-gradual-green padding radius text-center shadow-blur">
+						<view class="text-sm">酱紫玩家</view>
+						<view class="margin-top-sm text-Abc">29</view>
+					</view>
+				</view>
+				
+				<view class="padding-sm">
+					<view class="bg-gradual-purple padding radius text-center shadow-blur">
 						<view class="text-sm">门店经理</view>
 						<view class="margin-top-sm text-Abc">1</view>
 					</view>
 				</view>
 				<view class="padding-sm">
-					<view class="bg-gradual-purple padding radius text-center shadow-blur">
+					<view class="bg-gradual-green padding radius text-center shadow-blur">
 						<view class="text-sm">部门经理</view>
 						<view class="margin-top-sm text-Abc">0</view>
 					</view>
 				</view>
+				<view class="padding-sm">
+					<view class="bg-gradual-blue padding radius text-center shadow-blur">
+						<view class="text-sm">运营总监</view>
+						<view class="margin-top-sm text-Abc">0</view>
+					</view>
+				</view>
+			
+				
 			</view>
 			<scroll-view scroll-x class="padding response cu-steps steps-bottom" :scroll-into-view="'scroll-2'"
 			 scroll-with-animation>

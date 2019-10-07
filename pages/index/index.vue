@@ -44,14 +44,14 @@
 				Elements: [{
 						title: '门店经理',
 						name: '￥3980',
-						color: 'cyan',
+						color: 'green',
 						cuIcon: 'selection',
 						type: 'store'
 					},
 					{
 						title: '酱紫玩家',
 						name: '￥999',
-						color: 'blue',
+						color: 'cyan',
 						cuIcon: 'group',
 						type: 'player'
 					}
@@ -76,5 +76,4 @@
 </script>
 
 <style>
-
 </style>

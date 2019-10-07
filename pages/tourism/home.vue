@@ -19,9 +19,9 @@
 					<text :class="'cuIcon-' + item.cuIcon"></text>
 				</navigator>
 			</view>
-			<view class="cu-bar bg-white margin-top">
+			<view class="cu-bar bg-white margin-top color-f06c7a">
 				<view class="action">
-					<text class="cuIcon-title text-blue"></text>旅游
+					<text class="cuIcon-title text-blue color-f06c7a"></text>旅游
 				</view>
 			</view>
 			
@@ -55,5 +55,8 @@
 <style>
 	.page {
 		height: 100vh;
+	}
+	.color-f06c7a {
+		color: #f06c7a;
 	}
 </style>
