@@ -30,6 +30,13 @@ request.interceptors.response(res => {
 			icon: "none"
 		});
 	}
+	
+	if(res.statusCode === 429 ){
+		uni.showToast({
+			title: '请求次数过多，请稍后请求',
+			icon: "none"
+		});
+	}
 	// return false;    // 阻止返回,页面不会接收返回值
 	// return {message: '自定义值，来自拦截器'};   // 返回您自定义的值，将覆盖原始返回值
 	// return Promise.reject('error from response interceptors') // 向外层抛出错误，用catch捕获
@@ -59,8 +66,8 @@ export async function productOrder (datas) {
 				captcha_key: datas.captcha_key,
 				captcha_code: datas.captcha_code,
 				type: datas.type,
-				sku_id: datas.sku_id,
-				amount: datas.amount
+				remark: datas.remark,
+				items: datas.items
 			}
 		})
 		return response;

@@ -26,20 +26,21 @@
 				</view>
 			</view>
 			
-			<view class="cu-form-group">
-				<view class="title">出发地点</view>
-				<input placeholder="输入框出发地点" name="input" v-model="location"></input>
-				<!-- <text class='cuIcon-locationfill text-orange'></text> -->
-			</view>
-			
-			<view class="cu-form-group">
+			<!-- <view class="cu-form-group">
 				<view class="title">出发日期</view>
-				<picker mode="date" :value="date" start="2015-09-01" end="2020-09-01" @change="DateChange">
+				<picker mode="date" :value="date" start="2019-09-01" end="2019-11-01" @change="DateChange">
 					<view class="picker">
 						{{date}}
 					</view>
 				</picker>
+			</view> -->
+			
+			<view class="cu-form-group">
+				<view class="title">备注</view>
+				<input placeholder="输入备注" name="input" v-model="mark"></input>
+				<!-- <text class='cuIcon-locationfill text-orange'></text> -->
 			</view>
+			
 		</view>
 		
 		<view class="bg-white margin">
@@ -97,7 +98,7 @@
 				SkuList: [],
 				SkuId: null,
 				amount: 1,
-				location: ''
+				mark: ''
 			}
 		},
 		async onLoad(RouterOptions) {
@@ -168,15 +169,6 @@
 					return false;
 				}
 				
-				if(!this.location){
-					uni.showToast({
-						title: '请填写出发地点',
-						icon: "none"
-					});
-					
-					return false;
-				}
-				
 				// 获取验证码
 				let captchaResponse = await orderaptcha();
 				// 创建验证码成功
@@ -194,18 +186,24 @@
 				let orderResponse = await productOrder({
 					captcha_key: this.captcha.key,
 					captcha_code:this.captchaCode,
+					remark: this.remark,
 					type: 'product',
-					sku_id: this.SkuId,
-					amount: this.amount
+					items: [{
+						sku_id: this.SkuId,
+						amount: this.amount,
+						// departure_time: this.date,
+					}]
 				});
 				
 				// 订单创建成功
 				if(orderResponse.statusCode === 201){
-					this.memberOrderInfo = orderResponse.data;
-					this.memberOrderStatus = 'UndeReview';
-					this.tip = orderResponse.data.type == 'player' ? '您已购买酱紫玩家，审核中' : '您已购买门店经理，审核中';
-					this.dialogModal = false;
+					//console.log(orderResponse);
+					uni.showToast({
+						title: '下单成功',
+						icon: "success"
+					});
 				}
+				this.dialogModal = false;
 			},
 			async getCaptchaCode() {
 				// 获取验证码
