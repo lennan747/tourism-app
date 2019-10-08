@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<tourism v-if="PageCur=='tourism'" :products="Products" :elements="Elements"></tourism>
-		<team v-if="PageCur=='team'"></team>
+		<team v-if="PageCur=='team'" :datas="Teams"></team>
 		<user v-if="PageCur=='user'"></user>
 		<view class="cu-bar tabbar bg-white shadow foot">
 			<view class="action" @click="NavChange" data-cur="tourism">
@@ -27,25 +27,39 @@
 </template>
 
 <script>
-	import { getProductsOfRecommend } from '../../utils/api.js'
+	//import {uniCollapse,uniCollapseItem} from "uni-ui"
+	import { getProductsOfRecommend,team } from '../../utils/api.js'
 	import { mapMutations } from 'vuex'
 	export default {
+		//components: {uniCollapse,uniCollapseItem},
 		methods: {
-			NavChange: function(e) {
+			NavChange: async function(e) {
 				let cur = e.currentTarget.dataset.cur
 				if(cur == 'team'){
 					// 获取团队信息
-					console.log('team');
+					let teamResponse = await team();
+					if(teamResponse.statusCode !== 200){
+						uni.showToast({
+							title: '暂无团队',
+							icon: "none"
+						});
+						return false;
+					}else{
+						console.log(teamResponse.data);
+						this.Teams = teamResponse.data
+					}
 				}
 				
 				if(cur == 'user'){
 					// 获取用户信息
 					console.log('user');
+					
 				}
 				
 				if(cur == 'tourism'){
 					// 获取首页推荐
 					console.log('user');
+				
 				}
 				this.PageCur = e.currentTarget.dataset.cur
 			},
@@ -53,7 +67,6 @@
 		data() {
 			return {
 				PageCur: 'tourism',
-				Products: [],
 				Elements: [{
 						title: '门店经理',
 						name: '￥3980',
@@ -68,7 +81,9 @@
 						cuIcon: 'group',
 						type: 'player'
 					}
-				]
+				],
+				Products: [],
+				Teams: null,
 			}
 		},
 		async onLoad() {

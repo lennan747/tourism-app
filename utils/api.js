@@ -53,6 +53,23 @@ export async function getProductsOfDetails (datas) {
 	return response;
 }
 
+// 获取当前用户的团队信息
+export async function team () {
+	try{
+		let response = await request.get('team',{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+
+
 // 创建旅游订单
 export async function productOrder (datas) {
 	console.log(datas);

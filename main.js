@@ -18,6 +18,18 @@ Vue.component('user',user)
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom)
 
+import uniCollapse from './components/uni-collapse/uni-collapse.vue'
+Vue.component('uni-collapse', uniCollapse)
+
+import uniCollapseItem from './components/uni-collapse-item/uni-collapse-item.vue'
+Vue.component('uni-collapse-item', uniCollapseItem)
+
+import uniList from './components/uni-list/uni-list.vue'
+Vue.component('uni-list', uniList)
+
+import uniListItem from './components/uni-list-item/uni-list-item.vue'
+Vue.component('uni-list-item', uniListItem)
+
 Vue.config.productionTip = false
 
 App.mpType = 'app'

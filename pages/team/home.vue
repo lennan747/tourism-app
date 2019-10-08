@@ -32,96 +32,67 @@
 			</scroll-view> -->
 		</view>
 		<scroll-view scroll-x class="bg-green nav text-center">
-			<view class="cu-item" :class="0==TabCur?'text-white cur':''" @tap="tabSelect" data-id="0">
+			<view class="cu-item" :class="'teams' == TabCur ? 'text-white cur' : ''" @tap="tabSelect" data-id="teams">
 				<text class="cuIcon-camerafill"></text> 团队人员
 			</view>
-			<view class="cu-item" :class="1==TabCur?'text-white cur':''" @tap="tabSelect" data-id="1">
+			<view class="cu-item" :class="'orders' == TabCur ? 'text-white cur' : ''" @tap="tabSelect" data-id="orders">
 				<text class="cuIcon-upstagefill"></text> 团队订单
 			</view>
 		</scroll-view>
 	
 		<scroll-view scroll-y class="page">
-			<view v-for="(item,index) in 10" :key="index" v-if="index==TabCur" class="cu-list menu sm-border card-menu margin-top">
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+			<view v-for="(item,index) in teamsList" :key="index" v-if="index==TabCur" class="cu-list menu sm-border card-menu margin-top">
+				<view v-if="'teams' == index" :class="menuArrow?'arrow':''">
+					<view class="content">
+						<uni-collapse accordion="true">
+						    <uni-collapse-item v-for="(ite,ind) in item" :title="role[ind]">
+						        <view v-for="(te,nd) in ite" style="padding: 30upx;">
+						            {{ te.phone }}
+						        </view>
+						    </uni-collapse-item>
+						</uni-collapse>
+					</view>
+				</view>
+				<view v-else :class="menuArrow?'arrow':''">
+					<view class="content">
+						{{ index }}
+					</view>
+				</view>
+				
+				<!-- <view class="cu-item" :class="menuArrow?'arrow':''">
 					<view class="content">
 						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
 						<text class="text-grey">图片 + 标题 + {{index}}</text>
 					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
-					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
-						<text class="text-grey">图片 + 标题 + {{index}}</text>
-					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="cu-tabbar-height"></view>
 		</scroll-view>
 	</view>
+	
 </template>
 
 <script>
 	export default{
 		name:"team",
+		props: ['datas'],
 		data(){
 			return {
-				TabCur: 0,
+				TabCur: 'teams',
 				scrollLeft: 0,
-				menuArrow: false
+				menuArrow: false,
+				role:{
+					ordinary: '普通客户',
+					store: '门店经理',
+					department: '部门经理',
+					director: '运营总监',
+					player: '酱紫玩家'
+				}
+			}
+		},
+		computed: {
+			teamsList: function(){
+				return this.datas
 			}
 		},
 		methods: {
