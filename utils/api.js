@@ -9,22 +9,21 @@ request.setConfig({
 
 // 设置请求拦截器
 request.interceptors.request(config => {
-	uni.showLoading({
-		title: '加载中...'
-	})
-	// return false; // 终止请求
 	// return Promise.reject('error from request interceptors'); // 向外层抛出错误，用catch捕获
 	return config; // 返回修改后的配置，如未修改也需添加这行
 })
 
 // 设置响应拦截器
 request.interceptors.response(res => {
-	// 接收请求，执行响应操作
-	// 您的逻辑......
-	uni.hideLoading();
-	
 	// 401 验证失败
 	if (res.statusCode === 401 || res.statusCode === 422) {
+		uni.showToast({
+			title: '请登录',
+			icon: "none"
+		});
+	}
+	
+	if(res.statusCode === 422){
 		uni.showToast({
 			title: res.data.message,
 			icon: "none"
@@ -77,7 +76,6 @@ export async function productOrder (datas) {
 	}
 }
 
-
 // 获取推荐商品
 export async function getProductsOfRecommend (datas) {
 	let response = await request.get('products/recommend',{
@@ -100,7 +98,6 @@ export async function getMemberOrderInfo () {
 	return response;
 }
 
-
 // 获取用户信息
 export async function getUserInfo() {	
 	let response = await request.get('user', {
@@ -108,14 +105,12 @@ export async function getUserInfo() {
 			'Authorization': 'Bearer ' + await getToken()
 		}
 	})
-	
 	// 成功
 	if(response.statusCode === 200){
 		uni.setStorageSync('user_info',response.data)
 	}
 	return response;
 }
-
 
 // 创建会员订单
 export async function memberOrder (datas) {
@@ -266,6 +261,17 @@ export async function registercaptcha (datas) {
 			}
 		})
 		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+
+// 获取app配置
+export async function appConfig () {
+	try{
+		let response = await request.get('config')
 		return response;
 	}catch(e){
 		//TODO handle the exception

@@ -27,19 +27,32 @@
 </template>
 
 <script>
-	import { getUserInfo,getProductsOfRecommend } from '../../utils/api.js'
+	import { getProductsOfRecommend } from '../../utils/api.js'
 	import { mapMutations } from 'vuex'
 	export default {
 		methods: {
-			...mapMutations(['user']),
 			NavChange: function(e) {
+				let cur = e.currentTarget.dataset.cur
+				if(cur == 'team'){
+					// 获取团队信息
+					console.log('team');
+				}
+				
+				if(cur == 'user'){
+					// 获取用户信息
+					console.log('user');
+				}
+				
+				if(cur == 'tourism'){
+					// 获取首页推荐
+					console.log('user');
+				}
 				this.PageCur = e.currentTarget.dataset.cur
 			},
 		},
 		data() {
 			return {
 				PageCur: 'tourism',
-				UserInfo: {},
 				Products: [],
 				Elements: [{
 						title: '门店经理',
@@ -59,13 +72,7 @@
 			}
 		},
 		async onLoad() {
-			// 获取用户信息
-			let userResponse = await getUserInfo();
-			if(userResponse.statusCode === 200){
-				this.UserInfo = userResponse.data
-			}
-			
-			// 获取首页信息
+			// 获取首页推荐商品
 			let recommendResponse = await getProductsOfRecommend({page:1})
 			if(recommendResponse.statusCode === 200){
 				console.log(recommendResponse.data);

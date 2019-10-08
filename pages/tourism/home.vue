@@ -41,14 +41,7 @@
 <script>
 	export default {
 		name: "basics",
-		props: ['products','elements'],
-		data() {
-			return {
-			};
-		},
-		onShow() {
-			console.log("success")
-		}
+		props: ['products','elements']
 	}
 </script>
 

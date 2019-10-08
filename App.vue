@@ -1,7 +1,17 @@
 <script>
 	import Vue from 'vue'
+	import { appConfig,getUserInfo } from 'utils/api.js'
+	import {
+		mapMutations
+	} from 'vuex';
 	export default {
-		onLaunch: function() {
+		methods: {
+			...mapMutations(['config'])
+		},
+		onLaunch: async function() {
+			uni.showLoading({
+				title: '加载中...'
+			})
 			// 获取设备信息
 			uni.getSystemInfo({
 				success: function(e) {
@@ -25,6 +35,22 @@
 					// #endif
 				}
 			})
+			
+			// 获取app配置
+			let Config = await appConfig();
+			if(Config.statusCode == 200){
+				this.config(Config.data);
+			}
+
+			// 获取用户信息
+			let userResponse = await getUserInfo();
+			if(userResponse.statusCode === 200){
+				uni.hideLoading();
+				uni.showToast({
+					title: '登录成功',
+					icon: "none"
+				});
+			}
 		},
 		onShow: function(RouterOptions) {
 			// 获取pid

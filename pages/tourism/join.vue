@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<view v-if="type == 'store'">
-			门店经理介绍信息
+			<view v-html="managerIntroduction"></view>
 		</view>
 		<view v-if="type == 'player'">
-			酱紫玩家介绍信息
+			<view v-html="playerIntroduction"></view>
 		</view>
 		
 		<!-- 未购买 购买按钮 -->
@@ -50,8 +50,13 @@
 				tip: '11'
 			}
 		},
-		onLoad(RouterOptions) {
-			this.type = RouterOptions.type;
+		computed: {
+		    managerIntroduction () {
+		      return this.$store.state.config.manager.extra
+		    },
+			playerIntroduction () {
+			  return this.$store.state.config.player.extra
+			}
 		},
 		async onLoad(RouterOptions) {
 			// 获取选择的类型
@@ -69,7 +74,8 @@
 			if(!this.memberOrderInfo){
 				this.memberOrderStatus = 'CanBePurchased';
 			}
-			// 当前用户有会员订单
+			
+			// 当前用户有会员订单,审核中
 			if(this.memberOrderInfo && this.memberOrderInfo.pay_status == 'unpaid'){
 				this.tip = this.memberOrderInfo.type == 'player' ? '您已购买酱紫玩家，审核中' : '您已购买门店经理，审核中';
 				this.memberOrderStatus = 'UndeReview';

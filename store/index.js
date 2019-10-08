@@ -8,7 +8,8 @@ const store = new Vuex.Store({
 	state: {
 		hasLogin: false,
 		userInfo: {},
-		parantId: 0
+		parantId: 0,
+		config: {}
 	},
 	mutations:{
 		parant (state, pid) {
@@ -25,6 +26,9 @@ const store = new Vuex.Store({
 		},
 		user(state, userInfo){
 			state.userInfo = userInfo
+		},
+		config(state,config){
+			state.config = config
 		}
 	}
 })
