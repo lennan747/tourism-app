@@ -27,27 +27,33 @@
 </template>
 
 <script>
-	//import {uniCollapse,uniCollapseItem} from "uni-ui"
 	import { getProductsOfRecommend,team } from '../../utils/api.js'
 	import { mapMutations } from 'vuex'
 	export default {
-		//components: {uniCollapse,uniCollapseItem},
 		methods: {
+			...mapMutations(['teams']),
 			NavChange: async function(e) {
 				let cur = e.currentTarget.dataset.cur
 				if(cur == 'team'){
-					// 获取团队信息
-					let teamResponse = await team();
-					if(teamResponse.statusCode !== 200){
-						uni.showToast({
-							title: '暂无团队',
-							icon: "none"
-						});
-						return false;
-					}else{
-						console.log(teamResponse.data);
-						this.Teams = teamResponse.data
+					// 获取app配置
+					if (Object.keys(this.$store.state.teams).length == 0) {
+						uni.showLoading({
+							title: '加载中...'
+						})
+						let teamResponse = await team();
+						if(teamResponse.statusCode !== 200){
+							uni.showToast({
+								title: '暂无团队',
+								icon: "none"
+							});
+							return false;
+						}else{
+							this.teams(teamResponse.data);
+							this.Teams = teamResponse.data
+						}
+						uni.hideLoading();
 					}
+					this.Teams = this.$store.state.teams;
 				}
 				
 				if(cur == 'user'){
@@ -83,14 +89,14 @@
 					}
 				],
 				Products: [],
-				Teams: null,
+				Teams: null
 			}
 		},
 		async onLoad() {
 			// 获取首页推荐商品
 			let recommendResponse = await getProductsOfRecommend({page:1})
 			if(recommendResponse.statusCode === 200){
-				console.log(recommendResponse.data);
+				console.log('加载首页推荐商品');
 				this.Products = recommendResponse.data.data
 			}
 		}

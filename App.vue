@@ -1,17 +1,17 @@
 <script>
 	import Vue from 'vue'
-	import { appConfig,getUserInfo } from 'utils/api.js'
+	import {
+		appConfig,
+		getUserInfo
+	} from 'utils/api.js'
 	import {
 		mapMutations
 	} from 'vuex';
 	export default {
 		methods: {
-			...mapMutations(['config'])
+			...mapMutations(['config', 'user'])
 		},
-		onLaunch: async function() {
-			uni.showLoading({
-				title: '加载中...'
-			})
+		onLaunch: function() {
 			// 获取设备信息
 			uni.getSystemInfo({
 				success: function(e) {
@@ -35,46 +35,58 @@
 					// #endif
 				}
 			})
-			
-			// 获取app配置
-			let Config = await appConfig();
-			if(Config.statusCode == 200){
-				this.config(Config.data);
-			}
-
-			// 获取用户信息
-			let userResponse = await getUserInfo();
-			if(userResponse.statusCode === 200){
-				uni.hideLoading();
-				uni.showToast({
-					title: '登录成功',
-					icon: "none"
-				});
-			}
 		},
-		onShow: function(RouterOptions) {
-			// 获取pid
+		onShow: async function(RouterOptions) {
 			try {
+				uni.showLoading({
+					title: '加载中...'
+				})
+				
+				// 处理用户来源 pid不存在且有pid
 				let query_pid = RouterOptions.query.pid;
-				console.log(query_pid);
 				let storage_pid = uni.getStorageSync('parent_id');
 				if (!storage_pid && query_pid) {
 					console.log('no parent, need save!');
 					uni.setStorageSync('parent_id', query_pid)
 				}
-				// 判断登录状态
-				let token = uni.getStorageSync('access_token') || '';
-				if(!token){
-					uni.reLaunch({
-						url: 'pages/login/login'
-					});	
-				}else{
-					console.log('logined');
+				
+				// 获取app配置
+				if (Object.keys(this.$store.state.config).length == 0) {
+					let configResponse = await appConfig();
+					if (configResponse.statusCode == 200) {
+						console.log('加载app配置...');
+						this.config(configResponse.data);
+					}
 				}
 				
+				// 获取用户信息
+				if (Object.keys(this.$store.state.userInfo).length == 0) {
+					let userResponse = await getUserInfo();
+					if (userResponse.statusCode === 200) {
+						console.log('加载用户信息...');
+						this.user(userResponse.data);
+					}
+				}
+				
+				// 判断登录状态
+				let token = uni.getStorageSync('access_token') || '';
+				if (!token) {
+					console.log('登录...');
+					uni.hideLoading();
+					uni.reLaunch({
+						url: '/pages/login/login'
+					});
+					return false;
+				}
+				// 登录成功
+				uni.hideLoading();
+				uni.showToast({
+					title: '登录成功',
+					icon: "none"
+				});
 			} catch (e) {
-				//TODO handle the exception
 				console.log(e);
+				uni.hideLoading();
 			}
 		},
 		onHide: function() {
@@ -88,17 +100,18 @@
 	@import "/static/iconfont/font.scss";
 	@import "colorui/main.css";
 	@import "colorui/icon.css";
-	
+
 	.text-f06c7a {
 		color: #f06c7a;
 	}
+
 	.nav-list {
 		display: flex;
 		flex-wrap: wrap;
 		padding: 0px 40upx 0px;
 		justify-content: space-between;
 	}
-	
+
 	.nav-li {
 		padding: 30upx;
 		border-radius: 12upx;
@@ -110,7 +123,7 @@
 		position: relative;
 		z-index: 1;
 	}
-	
+
 	.nav-li::after {
 		content: "";
 		position: absolute;
@@ -124,30 +137,30 @@
 		opacity: 0.2;
 		transform: scale(0.9, 0.9);
 	}
-	
+
 	.nav-li.cur {
 		color: #fff;
 		background: rgb(94, 185, 94);
 		box-shadow: 4upx 4upx 6upx rgba(94, 185, 94, 0.4);
 	}
-	
+
 	.nav-title {
 		font-size: 32upx;
 		font-weight: 300;
 	}
-	
+
 	.nav-title::first-letter {
 		font-size: 40upx;
 		margin-right: 4upx;
 	}
-	
+
 	.nav-name {
 		font-size: 28upx;
 		text-transform: Capitalize;
 		margin-top: 20upx;
 		position: relative;
 	}
-	
+
 	.nav-name::before {
 		content: "";
 		position: absolute;
@@ -159,7 +172,7 @@
 		right: 0;
 		opacity: 0.5;
 	}
-	
+
 	.nav-name::after {
 		content: "";
 		position: absolute;
@@ -171,13 +184,13 @@
 		right: 40upx;
 		opacity: 0.3;
 	}
-	
+
 	.nav-name::first-letter {
 		font-weight: bold;
 		font-size: 36upx;
 		margin-right: 1px;
 	}
-	
+
 	.nav-li text {
 		position: absolute;
 		right: 30upx;
@@ -188,34 +201,34 @@
 		text-align: center;
 		line-height: 60upx;
 	}
-	
+
 	.text-light {
 		font-weight: 300;
 	}
-	
+
 	@keyframes show {
 		0% {
 			transform: translateY(-50px);
 		}
-	
+
 		60% {
 			transform: translateY(40upx);
 		}
-	
+
 		100% {
 			transform: translateY(0px);
 		}
 	}
-	
+
 	@-webkit-keyframes show {
 		0% {
 			transform: translateY(-50px);
 		}
-	
+
 		60% {
 			transform: translateY(40upx);
 		}
-	
+
 		100% {
 			transform: translateY(0px);
 		}
