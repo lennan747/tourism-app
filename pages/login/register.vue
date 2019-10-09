@@ -25,7 +25,7 @@
 			</view>
 		</view>
 
-		<view class="cu-modal" :class="dialogModal">
+		<view class="cu-modal" :class="dialogModal" style="z-index: 900;">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-f06c7a justify-end">
 					<input class="basis-lg" placeholder="请输入验证码" v-model="captchaCode" placeholder-style="color: rgba(255,255,255,0.8);" />

@@ -1,47 +1,44 @@
 <template name="team">
 	<view>
 		<view class="bg-img padding-sm" style="background-image: url('/static/componentBg.png')">
-			
 			<view class="flex justify-center padding-bottom-sm">
 				<view class="padding-sm">
-					<view class="bg-gradual-purple padding radius text-center shadow-blur">
-						<view class="text-sm">等级</view>
-						<view class="margin-top-sm text-Abc">{{ upgrade[userInfo.identity] }}</view>
+					<view class="bg-cyan padding radius text-center shadow-blur">
+						<view class="nav-title">{{ upgrade[userInfo.identity] }}</view>
+						<view class="margin-top-sm text-sm">你的等级</view>
 					</view>
 				</view>
 			</view>
-			
 			<view class="flex justify-center padding-bottom-sm">
 				<view v-if="upgrade[userInfo.identity] != 'player'" class="padding-sm">
-					<view class="bg-gradual-blue padding radius text-center shadow-blur">
-						<view class="text-sm">团队奖励</view>
-						<view class="margin-top-sm text-Abc">{{ commissionsCount.stored + commissionsCount.storet }}¥</view>
+					<view class="bg-green padding radius text-center shadow-blur">
+						<view class="nav-title">¥{{ commissionsCount.store_d + commissionsCount.store_t }}</view>
+						<view class="margin-top-sm text-sm">团队奖励</view>
 					</view>
 				</view>
 				<view v-if="upgrade[userInfo.identity] == 'player'" class="padding-sm">
-					<view class="bg-gradual-purple padding radius text-center shadow-blur">
-						<view class="text-sm">团队奖励</view>
-						<view class="margin-top-sm text-Abc">{{ commissionsCount.player}}¥</view>
+					<view class="bg-green padding radius text-center shadow-blur">
+						<view class="nav-title">¥{{ commissionsCount.player}}</view>
+						<view class="margin-top-sm text-sm">团队奖励</view>
 					</view>
 				</view>
 				<view class="padding-sm">
-					<view class="bg-gradual-purple padding radius text-center shadow-blur">
-						<view class="text-sm">收客奖励</view>
-						<view class="margin-top-sm text-Abc">{{ commissionsCount.tourismd + commissionsCount.tourismt }}¥</view>
+					<view class="bg-green padding radius text-center shadow-blur">
+						<view class="nav-title">¥{{ commissionsCount.tourism_d + commissionsCount.tourism_t }}</view>
+						<view class="margin-top-sm text-sm">收客奖励</view>
 					</view>
 				</view>
-			
 			</view>
 		</view>
-		<scroll-view scroll-x class="bg-green nav text-center">
-			<view class="cu-item" :class="'teams' == TabCur ? 'text-white cur' : ''" @tap="tabSelect" data-id="teams">
+		<scroll-view scroll-x class="bg-white nav text-center">
+			<view class="cu-item" :class="'teams' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="teams">
 				<text class="cuIcon-group"></text>人员({{ teamsCount }}人)
 			</view>
-			<view class="cu-item" :class="'orders' == TabCur ? 'text-white cur' : ''" @tap="tabSelect" data-id="orders">
+			<view class="cu-item" :class="'orders' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="orders">
 				<text class="cuIcon-sort"></text>订单({{ ordersCount }}笔)
 			</view>
-			<view class="cu-item" :class="'commissions' == TabCur ? 'text-white cur' : ''" @tap="tabSelect" data-id="commissions">
-				<text class="cuIcon-sort"></text>分成({{ commissionsCount.count }}条)
+			<view class="cu-item" :class="'commissions' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="commissions">
+				<text class="cuIcon-selectionfill"></text>奖励({{ commissionsCount.count }}条)
 			</view>
 		</scroll-view>
 	
@@ -62,9 +59,15 @@
 					<view class="content">
 						<uni-collapse accordion="true">
 						    <uni-collapse-item v-for="(ite,ind) in item" :title="type[ind]">
+								<view class="flex justify-between" style="padding: 30upx;">
+									<view class="text-sm" >订单用户</view>
+									<view class="text-sm">订单号</view>
+									<view class="text-sm">支付状态</view>
+								</view>
 						        <view class="flex justify-between" v-for="(te,nd) in ite" style="padding: 30upx;">
-						            <view>{{ te.no }}</view>
-									<view>{{ te.paid_at == null ? '未支付' : '已支付'}}</view>
+									<view class="text-sm" >{{ te.user_name}}</view>
+									<view class="text-sm">{{ te.no }}</view>
+									<view class="text-sm">{{ te.paid_at == null ? '未支付' : '已支付'}}</view>
 						        </view>
 						    </uni-collapse-item>
 						</uni-collapse>
@@ -73,9 +76,14 @@
 				<view v-if="'commissions' == index" :class="menuArrow?'arrow':''">
 					<view class="content">
 						<uni-collapse accordion="true">
-						    <uni-collapse-item v-for="(ite,ind) in item" :title="commissions[ind]">
+						    <uni-collapse-item v-for="(ite,ind) in item" :title="commissions[ind]+'('+ commissionsCount[ind] +'¥)'">
+								<view class="flex justify-between" style="padding: 30upx;">
+									<view class="text-sm">订单号</view>
+									<view class="text-sm">奖励</view>
+								</view>
 						        <view class="flex justify-between" v-for="(te,nd) in ite" style="padding: 30upx;">
-						            <view>{{ te.money }}¥</view>
+						            <view>{{ te.no }}</view>
+									<view>{{ te.money }}¥</view>
 						        </view>
 						    </uni-collapse-item>
 						</uni-collapse>
@@ -174,10 +182,10 @@
 				let Commission = Object;
 				if(Object.keys(Commissions).length == 0){
 					return {
-						tourismt: 0,
-						tourismd: 0,
-						stored: 0,
-						storet: 0,
+						tourism_t: 0,
+						tourism_d: 0,
+						store_d: 0,
+						store_t: 0,
 						player: 0,
 						count: 0
 					}
@@ -194,33 +202,33 @@
 					}
 					if(key == 'tourism_t'){
 						Object.keys(Commission).forEach(function(k){
-							tourismCommissionT = tourismCommissionD + Number(Commission[k]['money'])
+							tourismCommissionT = tourismCommissionT + Number(Commission[k]['money'])
 						})
 					}
 					if(key == 'store_d'){
 						console.log('store_d');
 						Object.keys(Commission).forEach(function(k){
 							console.log( Commission[k]['money']);
-							storeCommissionD = tourismCommissionD + Number(Commission[k]['money'])
+							storeCommissionD = storeCommissionD + Number(Commission[k]['money'])
 						})
 					}
 					if(key == 'store_t'){
 						Object.keys(Commission).forEach(function(k){
-							storeCommissionT = tourismCommissionD + Number(Commission[k]['money'])
+							storeCommissionT = storeCommissionT + Number(Commission[k]['money'])
 						})
 					}
 					if(key == 'player'){
 						Object.keys(Commission).forEach(function(k){
-							playerCommission = tourismCommissionD + Number(Commission[k]['money'])
+							playerCommission = playerCommission + Number(Commission[k]['money'])
 						})
 					}
 				})
 				
 				return {
-					tourismt: tourismCommissionD,
-					tourismd: tourismCommissionT,
-					stored: storeCommissionD,
-					storet: storeCommissionT,
+					tourism_d: tourismCommissionD,
+					tourism_t: tourismCommissionT,
+					store_d: storeCommissionD,
+					store_t: storeCommissionT,
 					player: playerCommission,
 					count: count
 				}

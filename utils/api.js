@@ -16,7 +16,15 @@ request.interceptors.request(config => {
 // 设置响应拦截器
 request.interceptors.response(res => {
 	// 401 验证失败
-	if (res.statusCode === 401 || res.statusCode === 422) {
+	
+	if(res.statusCode === 401){
+		uni.showToast({
+			title: '登录失败',
+			icon: "none"
+		});
+	}
+	
+	if (res.statusCode === 422) {
 		uni.showToast({
 			title: '请登录',
 			icon: "none"
