@@ -1,32 +1,30 @@
 <template name="team">
 	<view>
-		<view class="bg-img padding-sm" style="background-image: url('/static/componentBg.png')">
-			<view class="flex justify-center padding-bottom-sm">
-				<view class="padding-sm">
-					<view class="bg-cyan padding radius text-center shadow-blur">
-						<view class="nav-title">{{ upgrade[userInfo.identity] }}</view>
-						<view class="margin-top-sm text-sm">你的等级</view>
+		<view class="bg-gradual-green padding shadow-blur">
+			<view class="flex solid-bottom justify-center">
+				<view class="margin padding-lr text-sm">
+					<view class="text-center" @click="erweima">
+						<view class="text-red cuIcon-qrcode" style="font-size: 100upx;"></view>
+						<view style="font-size: 1upx;">推广二维码</view>
 					</view>
 				</view>
 			</view>
-			<view class="flex justify-center padding-bottom-sm">
-				<view v-if="upgrade[userInfo.identity] != 'player'" class="padding-sm">
-					<view class="bg-green padding radius text-center shadow-blur">
-						<view class="nav-title">¥{{ commissionsCount.store_d + commissionsCount.store_t }}</view>
-						<view class="margin-top-sm text-sm">团队奖励</view>
-					</view>
+			<view class="cu-list grid col-3 no-border">
+				<view class="cu-item">
+					<view class="nav-title text-red">{{ upgrade[userInfo.identity] }}</view>
+					<view class="margin-top-sm text-sm text-black">你的等级</view>
 				</view>
-				<view v-if="upgrade[userInfo.identity] == 'player'" class="padding-sm">
-					<view class="bg-green padding radius text-center shadow-blur">
-						<view class="nav-title">¥{{ commissionsCount.player}}</view>
-						<view class="margin-top-sm text-sm">团队奖励</view>
-					</view>
+				<view class="cu-item" v-if="upgrade[userInfo.identity] != 'player'">
+					<view class="nav-title text-red">¥{{ commissionsCount.store_d + commissionsCount.store_t }}</view>
+					<view class="margin-top-sm text-sm text-black">团队奖励</view>
 				</view>
-				<view class="padding-sm">
-					<view class="bg-green padding radius text-center shadow-blur">
-						<view class="nav-title">¥{{ commissionsCount.tourism_d + commissionsCount.tourism_t }}</view>
-						<view class="margin-top-sm text-sm">收客奖励</view>
-					</view>
+				<view class="cu-item" v-if="upgrade[userInfo.identity] == 'player'">
+					<view class="nav-title text-red">¥{{ commissionsCount.player}}</view>
+					<view class="margin-top-sm text-sm text-black">团队奖励</view>
+				</view>
+				<view class="cu-item">
+					<view class="nav-title text-red">¥{{ commissionsCount.tourism_d + commissionsCount.tourism_t }}</view>
+					<view class="margin-top-sm text-sm text-black">收客奖励</view>
 				</view>
 			</view>
 		</view>
@@ -99,16 +97,33 @@
 			</view>
 			<view class="cu-tabbar-height"></view>
 		</scroll-view>
+	    
+		<view class="cu-modal" :class="qrShow=='Image'?'show':''">
+			<view class="cu-dialog">
+				<view class="margin">
+					<image :src="qrData" style="width: 580upx;height: 954upx;"></image>
+				</view>
+				<view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub  solid-left" @tap="guanbi">关闭</view>
+				</view>
+			</view>
+		</view>
+
 	</view>
-	
+
 </template>
 
 <script>
+	import canvas_x from '../../components/mg-h5hb/common/canvas_x.js'
 	export default{
 		name:"team",
 		props: ['datas','user'],
 		data(){
 			return {
+				qrShow: null,
+				qrData: null,
+				canvasId: 'default_PosterCanvasId',		
+				val:"http://www.baidu.com",
 				TabCur: 'teams',
 				scrollLeft: 0,
 				menuArrow: false,
@@ -238,6 +253,50 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			guanbi:function(){
+				this.qrShow= false;
+			},
+			erweima:function(){
+				this.qrShow= 'Image';
+				canvas_x.makeImage({
+								type: 'url',
+								parts: [
+									{
+										type: 'image',
+										url: '../../static/beijing22.jpg',
+										width: 680,
+										height: 1264,
+										// backgroundSize:680,
+									},
+									{
+										type: 'qrcode',
+										text: this.datas.invite_code.url,
+										x: 200,
+										y: 200,
+										width: 280,
+										height: 280,
+										padding: 0,
+										background: '#fff',
+										level: 3
+									},
+									{
+										type: 'text',
+										text: '酱紫旅行',
+										textAlign: 'center',
+										lineAlign: 'TOP',
+										x: 0,
+										y: 600,
+										color: 'black',
+										size: '80px',
+										// bold: true
+									}
+								],
+								width: 680,
+								height: 1264
+							}, (err, data) => {
+								this.qrData = data;
+							})
 			}
 		}
 	}

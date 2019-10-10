@@ -35,6 +35,24 @@
 		    "style" : {
 				"navigationBarTitleText": "商品"
 			}
+		},
+		{
+		    "path" : "pages/user/notices",
+		    "style" : {
+				"navigationBarTitleText": "通知列表"
+			}
+		},
+		{
+		    "path" : "pages/user/orders",
+		    "style" : {
+				"navigationBarTitleText": "订单列表"
+			}
+		},
+		{
+		    "path" : "pages/user/reflects",
+		    "style" : {
+				"navigationBarTitleText": "提现列表"
+			}
 		}
     ],
 	"globalStyle": {

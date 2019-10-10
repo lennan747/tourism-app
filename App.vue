@@ -12,29 +12,29 @@
 			...mapMutations(['config', 'user'])
 		},
 		onLaunch: function() {
-			// 获取设备信息
-			uni.getSystemInfo({
-				success: function(e) {
-					// #ifndef MP
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					if (e.platform == 'android') {
-						Vue.prototype.CustomBar = e.statusBarHeight + 50;
-					} else {
-						Vue.prototype.CustomBar = e.statusBarHeight + 45;
-					};
-					// #endif
-					// #ifdef MP-WEIXIN
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					let custom = wx.getMenuButtonBoundingClientRect();
-					Vue.prototype.Custom = custom;
-					Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-					// #endif       
-					// #ifdef MP-ALIPAY
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
-					// #endif
-				}
-			})
+			// // 获取设备信息
+			// uni.getSystemInfo({
+			// 	success: function(e) {
+			// 		// #ifndef MP
+			// 		Vue.prototype.StatusBar = e.statusBarHeight;
+			// 		if (e.platform == 'android') {
+			// 			Vue.prototype.CustomBar = e.statusBarHeight + 50;
+			// 		} else {
+			// 			Vue.prototype.CustomBar = e.statusBarHeight + 45;
+			// 		};
+			// 		// #endif
+			// 		// #ifdef MP-WEIXIN
+			// 		Vue.prototype.StatusBar = e.statusBarHeight;
+			// 		let custom = wx.getMenuButtonBoundingClientRect();
+			// 		Vue.prototype.Custom = custom;
+			// 		Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+			// 		// #endif       
+			// 		// #ifdef MP-ALIPAY
+			// 		Vue.prototype.StatusBar = e.statusBarHeight;
+			// 		Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
+			// 		// #endif
+			// 	}
+			// })
 		},
 		onShow: async function(RouterOptions) {
 			try {
@@ -43,11 +43,11 @@
 				})
 				
 				// 处理用户来源 pid不存在且有pid
-				let query_pid = RouterOptions.query.pid;
-				let storage_pid = uni.getStorageSync('parent_id');
-				if (!storage_pid && query_pid) {
+				let invite_code = RouterOptions.query ? RouterOptions.query.invite_code : false;
+				let storage_invite_code = uni.getStorageSync('invite_code');
+				if (!storage_invite_code && invite_code) {
 					console.log('no parent, need save!');
-					uni.setStorageSync('parent_id', query_pid)
+					uni.setStorageSync('invite_code', invite_code)
 				}
 				
 				// 获取app配置

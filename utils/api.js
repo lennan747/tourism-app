@@ -80,7 +80,7 @@ export async function team () {
 
 // 创建旅游订单
 export async function productOrder (datas) {
-	console.log(datas);
+	//console.log(datas);
 	try{
 		let response = await request.post('order/store-product',{
 			header: {
@@ -106,6 +106,17 @@ export async function getProductsOfRecommend (datas) {
 	let response = await request.get('products/recommend',{
 		data: {
 			page: datas.page ? datas.page : 1
+		}
+	})
+	
+	return response;
+}
+
+// 用户商品订单
+export async function getTourismOrder () {
+	let response = await request.get('user/tourism/order',{
+		header: {
+			'Authorization': 'Bearer ' + await getToken()
 		}
 	})
 	
@@ -139,7 +150,7 @@ export async function getUserInfo() {
 
 // 创建会员订单
 export async function memberOrder (datas) {
-	console.log(datas);
+	//console.log(datas);
 	try{
 		let response = await request.post('order/store-member',{
 			header: {
@@ -185,7 +196,6 @@ export async function login(datas) {
 		})
 		// 登录成功，保存token
 		if(response.statusCode === 200){
-			console.log(response);
 			setToken(response.data.access_token,response.data.expires_in)
 		}
 		return response;
@@ -247,7 +257,7 @@ export async function register (datas) {
 	try{
 		let response = await request.post('users', {
 			data: {
-				parent_id: datas.parent_id,
+				invite_code: datas.invite_code,
 				password: datas.password,
 				verification_key: datas.verification_key,
 				verification_code: datas.verification_code

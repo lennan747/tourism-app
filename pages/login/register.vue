@@ -138,8 +138,13 @@
 						title: '注册中'
 					});
 					// 从缓存中获取上一级，不存在给0
-					let parent_id = uni.getStorageSync('parent_id') || "";
-					let registerResponse = await register({parent_id: parent_id,password: this.passwd,verification_key: this.verificationCode.key,verification_code: this.code})
+					let invite_code = uni.getStorageSync('invite_code') || "";
+					let registerResponse = await register({
+						invite_code: invite_code,
+						password: this.passwd,
+						verification_key: this.verificationCode.key,
+						verification_code: this.code,
+						})
 					if (registerResponse.statusCode === 422) {
 						uni.showToast({
 							title: '验证码已失效',
