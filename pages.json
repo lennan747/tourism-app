@@ -53,6 +53,18 @@
 		    "style" : {
 				"navigationBarTitleText": "提现列表"
 			}
+		},
+		{
+		    "path" : "pages/user/bankcards",
+		    "style" : {
+				"navigationBarTitleText": "银行卡"
+			}
+		},
+		{
+		    "path" : "pages/user/editcard",
+		    "style" : {
+				"navigationBarTitleText": "新增银行卡"
+			}
 		}
     ],
 	"globalStyle": {

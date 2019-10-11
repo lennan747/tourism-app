@@ -61,6 +61,13 @@
 						url: '/'
 					});
 				}
+				// 登录成功
+				if (loginResponse.statusCode === 401) {
+					uni.showToast({
+						title: loginResponse.message,
+						icon: 'none'
+					})
+				}
 			}
 		}
 	}
