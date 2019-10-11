@@ -114,7 +114,7 @@ export async function getProductsOfRecommend (datas) {
 
 // 用户商品订单
 export async function getTourismOrder () {
-	let response = await request.get('user/tourism/order',{
+	let response = await request.get('order/tourism',{
 		header: {
 			'Authorization': 'Bearer ' + await getToken()
 		}

@@ -70,7 +70,7 @@
 					color: 'orange',
 					badge: false,
 					name: '订单',
-					url: '/pages/user/notices',
+					url: '/pages/user/orders',
 				}, {
 					cuIcon: 'profilefill',
 					color: 'yellow',
