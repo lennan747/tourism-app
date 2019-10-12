@@ -55,10 +55,112 @@ export function setParent(parentId) {
 	return uni.setStorageSync('parent_id', parentId)
 }
 
+// 获取银行卡列表
+export async function bankList () {
+	try{
+		let response = await request.get('bank/card',{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			}
+		})
+		
+		if(response.statusCode != 200){
+			uni.showToast({
+				icon: 'none',
+				title: '银行卡获取失败'
+			})
+			return false;
+		}
+		return response.data;
+	}catch(e){
+		//TODO handle the exception
+	}
+}
+
+
+// 添加银行卡
+export async function deletBankCard (id) {
+	try{
+		let response = await request.delete('bank/card/'+id,{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			}
+		})
+		if(response.statusCode == 204){
+			uni.showToast({
+				icon: 'none',
+				title: '删除银行卡成功'
+			})
+			return true;
+		}
+		return false;
+	}catch(e){
+		//TODO handle the exception
+	}
+}
+
+// 添加银行卡
+export async function createBankCard (datas) {
+	try{
+		let response = await request.post('bank/card',{
+			data: {
+				type: datas.type,
+				name: datas.name,
+				card_name: datas.card_name,
+				account: datas.account
+			},
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			}
+		})
+		if(response.statusCode != 201){
+			uni.showToast({
+				icon: 'none',
+				title: '添加银行卡失败'
+			})
+			return false;
+		}
+		return true;
+	}catch(e){
+		//TODO handle the exception
+	}
+}
+
+// 修改银行卡
+export async function editBankCard (datas) {
+
+	try{
+		let response = await request.put('bank/card/'+datas.id,{
+			data: {
+				type: datas.type,
+				name: datas.name,
+				card_name: datas.card_name,
+				account: datas.account
+			},
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			}
+		})
+		if(response.statusCode != 200){
+			uni.showToast({
+				icon: 'none',
+				title: '添加银行卡失败'
+			})
+			return false;
+		}
+		return true;
+	}catch(e){
+		//TODO handle the exception
+	}
+}
+// 商品详情
 export async function getProductsOfDetails (datas) {
-	let response = await request.get('products/'+ datas.id + '?include=sku')
-	
-	return response;
+	try{
+		let response = await request.get('products/'+ datas.id + '?include=sku')
+		return response;
+	}catch(e){
+		//TODO handle the exception
+	}
 }
 
 // 获取当前用户的团队信息

@@ -209,9 +209,9 @@
 					count += Commissions[key].length;
 					Commission = Commissions[key];
 					if(key == 'tourism_d'){
-						console.log('tourism_d');
+						//console.log('tourism_d');
 						Object.keys(Commission).forEach(function(k){
-							console.log( Commission[k]['money']);
+							//console.log( Commission[k]['money']);
 							tourismCommissionD = tourismCommissionD + Number(Commission[k]['money'])
 						})
 					}
@@ -221,9 +221,9 @@
 						})
 					}
 					if(key == 'store_d'){
-						console.log('store_d');
+						//console.log('store_d');
 						Object.keys(Commission).forEach(function(k){
-							console.log( Commission[k]['money']);
+							//console.log( Commission[k]['money']);
 							storeCommissionD = storeCommissionD + Number(Commission[k]['money'])
 						})
 					}

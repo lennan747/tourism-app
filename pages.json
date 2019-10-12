@@ -65,6 +65,12 @@
 		    "style" : {
 				"navigationBarTitleText": "新增银行卡"
 			}
+		},
+		{
+		    "path" : "pages/user/reflectdo",
+		    "style" : {
+				"navigationBarTitleText": "提现"
+			}
 		}
     ],
 	"globalStyle": {

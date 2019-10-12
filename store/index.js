@@ -11,7 +11,8 @@ const store = new Vuex.Store({
 		parantId: 0,
 		config: {},
 		teams: {},
-		uesrOrders: false
+		uesrOrders: false,
+		bankList: false
 	},
 	mutations:{
 		parant (state, pid) {
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
 		},
 		userOrders(state,orders){
 			state.uesrOrders = orders
+		},
+		bankList(state,banks){
+			state.bankList = banks
 		}
 	}
 })

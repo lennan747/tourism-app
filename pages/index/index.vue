@@ -58,13 +58,12 @@
 				
 				if(cur == 'user'){
 					// 获取用户信息
-					console.log('user');
-					
+					//console.log('user');
 				}
 				
 				if(cur == 'tourism'){
 					// 获取首页推荐
-					console.log('user');
+					//console.log('user');
 				
 				}
 				this.PageCur = e.currentTarget.dataset.cur

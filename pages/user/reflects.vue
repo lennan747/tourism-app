@@ -1,10 +1,5 @@
 <template>
-	<view class="content">
-		
-		<view>
-			<navigator url="/pages/user/bankcards"> 银行管理 </navigator>
-		</view>
-		
+	<view class="content">	
 		<view class="navbar">
 			<view 
 				v-for="(item, index) in navList" :key="index" 
@@ -78,6 +73,9 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
+	    <view class="cu-bar bg-white tabbar border foot">
+			<navigator class="bg-red submit" url="/pages/user/reflectdo">提现</navigator>
+	    </view>
 	</view>
 </template> 
 
