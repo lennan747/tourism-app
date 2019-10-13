@@ -71,6 +71,24 @@
 		    "style" : {
 				"navigationBarTitleText": "提现"
 			}
+		},
+		{
+		    "path" : "pages/aboutUs",
+		    "style" : {
+				"navigationBarTitleText": "关于我们"
+			}
+		},
+		{
+		    "path" : "pages/businessCooperation",
+		    "style" : {
+				"navigationBarTitleText": "商务合作"
+			}
+		},
+		{
+		    "path" : "pages/consumer",
+		    "style" : {
+				"navigationBarTitleText": "客服"
+			}
 		}
     ],
 	"globalStyle": {

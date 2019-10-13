@@ -259,12 +259,14 @@
 			},
 			erweima:function(){
 				this.qrShow= 'Image';
+				let site_config = uni.getStorageSync('site_config')
 				canvas_x.makeImage({
 								type: 'url',
 								parts: [
 									{
 										type: 'image',
 										url: '../../static/beijing22.jpg',
+										//url: site_config.share_poster_bg.image,
 										width: 680,
 										height: 1264,
 										// backgroundSize:680,

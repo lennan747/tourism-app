@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<view v-if="type == 'store'">
+		<view v-if="type == 'store'" class="margin bg-white">
 			<view v-html="managerIntroduction"></view>
 		</view>
-		<view v-if="type == 'player'">
+		<view v-if="type == 'player'" class="margin bg-white">
 			<view v-html="playerIntroduction"></view>
 		</view>
 		
