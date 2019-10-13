@@ -55,6 +55,56 @@ export function setParent(parentId) {
 	return uni.setStorageSync('parent_id', parentId)
 }
 
+// 提现列表
+export async function withdraws() {
+	try{
+	    let response = await request.get('withdraw',{
+		    header: {
+			    'Authorization': 'Bearer ' + await getToken()
+		    }
+		})
+		
+		if(response.statusCode == 200){
+			return response.data;
+		}
+	}catch(e){
+		//TODO handle the exception
+	}
+}
+
+// 提现
+export async function createWithdraw(datas) {
+	try{
+		let response = await request.post('withdraw',{
+			header: {
+				'Authorization': 'Bearer ' + await getToken()
+			},
+			data: {
+				application_amount: datas.application_amount,
+				bank_card_id: datas.bank_card_id
+			}
+		})
+		
+		if(response.statusCode == 201){
+			uni.showToast({
+				icon: 'success',
+				title: '提现成功'
+			})
+			return response;
+		}
+		
+		if(response.statusCode != 201){
+			uni.showToast({
+				icon: 'none',
+				title: response.data.message
+			})
+			return false
+		}
+	}catch(e){
+		//TODO handle the exception
+	}	
+}
+
 // 获取银行卡列表
 export async function bankList () {
 	try{
