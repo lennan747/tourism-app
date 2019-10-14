@@ -26,7 +26,7 @@
 		</view>
 
 		<view class="cu-modal" :class="dialogModal" style="z-index: 900;">
-			<view class="cu-dialog">
+			<view class="cu-dialog bg-f06c7a">
 				<view class="cu-bar bg-f06c7a justify-end">
 					<input class="basis-lg" placeholder="请输入验证码" v-model="captchaCode" placeholder-style="color: rgba(255,255,255,0.8);" />
 					<image class="basis-sm pic-captcha margin-right" @click="getCaptchaCode()" :src="captcha.imageContent"></image>
@@ -59,7 +59,7 @@
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
 				getCodeisWaiting: false,
-				dialogModal: null,
+				dialogModal: false,
 			}
 		},
 		onLoad() {
@@ -290,7 +290,7 @@
 	.bg-f06c7a {
 		background-color: #f06c7a;
 		color: #ffffff;
-		height: 100%;
+		// height: 100%;
 	}
 
 	.pic-captcha {

@@ -2,7 +2,7 @@
 	<view>
 		<view class="padding margin bg-red " v-if="!show">
 			<view v-if="this.date != parseInt(this.withdraw_date)" class="text-center">
-				<view>今天不是日线日期</view>
+				<view>今天不是提现日期</view>
 			</view>
 			<view v-if="withdrawed">
 				<view class="text-center">审核中...</view>

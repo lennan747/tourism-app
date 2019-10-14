@@ -2,13 +2,13 @@
 	<view>
 		<tourism v-if="PageCur=='tourism'" :products="Products" :elements="Elements"></tourism>
 		<team v-if="PageCur=='team'" :datas="Teams"></team>
-		<user v-if="PageCur=='user'"></user>
+		<user v-if="PageCur=='user'" :datas="User"></user>
 		<view class="cu-bar tabbar bg-white shadow foot">
 			<view class="action" @click="NavChange" data-cur="tourism">
 				<view class='cuIcon-cu-image'>
 					<image :src="'/static/tabbar/tourism' + [PageCur=='tourism'?'':'gray'] + '.png'"></image>
 				</view>
-				<view :class="PageCur=='tourism'?'text-f06c7a':'text-gray'">酱紫</view>
+				<view :class="PageCur=='tourism'?'text-f06c7a':'text-gray'">酱梓</view>
 			</view>
 			<view class="action" @click="NavChange" data-cur="team">
 				<view class='cuIcon-cu-image'>
@@ -31,7 +31,7 @@
 	import { mapMutations } from 'vuex'
 	export default {
 		methods: {
-			...mapMutations(['teams']),
+			...mapMutations(['teams','userInfo']),
 			NavChange: async function(e) {
 				let cur = e.currentTarget.dataset.cur
 				if(cur == 'team'){
@@ -58,14 +58,10 @@
 				
 				if(cur == 'user'){
 					// 获取用户信息
-					//console.log('user');
+					//console.log(this.$store.state.userInfo);
+					this.User = uni.getStorageSync('user_info');
 				}
 				
-				if(cur == 'tourism'){
-					// 获取首页推荐
-					//console.log('user');
-				
-				}
 				this.PageCur = e.currentTarget.dataset.cur
 			},
 		},
@@ -80,7 +76,7 @@
 						type: 'store'
 					},
 					{
-						title: '酱紫玩家',
+						title: '酱梓玩家',
 						name: '￥999',
 						color: 'cyan',
 						cuIcon: 'group',
@@ -88,7 +84,8 @@
 					}
 				],
 				Products: [],
-				Teams: null
+				Teams: null,
+				User: null
 			}
 		},
 		async onLoad() {

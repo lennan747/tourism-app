@@ -5,7 +5,7 @@
 				<view class="margin padding-lr text-sm">
 					<view class="text-center" @click="erweima">
 						<view class="text-red cuIcon-qrcode" style="font-size: 100upx;"></view>
-						<view style="font-size: 1upx;">推广二维码</view>
+						<view class="text-sm">推广二维码</view>
 					</view>
 				</view>
 			</view>
@@ -150,7 +150,8 @@
 				upgrade: {
 					store: '门店经理',
 					department: '部门经理',
-					director: '运营总监'
+					director: '运营总监',
+					player: '酱紫玩家'
 				}
 			}
 		},
@@ -260,6 +261,13 @@
 			erweima:function(){
 				this.qrShow= 'Image';
 				let site_config = uni.getStorageSync('site_config')
+				if(process.env.NODE_ENV === 'development'){
+				    console.log('开发环境')
+					this.val = 'http://192.168.56.1:8080/h/'
+				}else{
+				    console.log('生产环境')
+					this.val = 'http://http://mb.jiangzi20.com/h/'
+				}
 				canvas_x.makeImage({
 								type: 'url',
 								parts: [

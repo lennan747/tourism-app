@@ -72,7 +72,7 @@
     },
     "h5" : {
         "devServer" : {
-            "port" : "",
+            "port" : 8888,
             "https" : false
         },
         "router" : {

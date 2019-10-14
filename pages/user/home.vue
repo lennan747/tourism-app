@@ -4,7 +4,7 @@
 			<view class="flex solid-bottom align-center">
 				<view class="padding-sm margin-xs radius">
 					<view class="cu-avatar xl round margin" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg);"></view>
-					<view class="text-center text-sm round bg-white text-green">18075308580</view>
+					<view class="text-center text-sm round bg-white text-green">{{ userInfo.name }}</view>
 				</view>
 				<view class="padding-top-sm padding-bottom-sm margin-xs">
 					<view class="cu-capsule round line-white">
@@ -12,7 +12,7 @@
 							我的余额
 						</view>
 						<view class="cu-tag line-white">
-							<text class="text-price text-white">80.00</text>
+							<text class="text-price text-white">{{ userInfo.money }}</text>
 						</view>
 					</view>
 				</view>
@@ -58,7 +58,8 @@
 
 <script>
 	export default {
-		name: "team",
+		name: "user",
+		props: ['datas'],
 		data() {
 			return {
 				TabCur: 0,
@@ -85,6 +86,12 @@
 					name: '通知',
 					url: '/pages/user/notices',
 				}],
+			}
+		},
+		computed:{
+			userInfo: function () {
+				//console.log(this.datas);
+				return this.datas
 			}
 		},
 		methods:{

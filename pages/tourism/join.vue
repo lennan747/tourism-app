@@ -8,16 +8,16 @@
 		</view>
 		
 		<!-- 未购买 购买按钮 -->
-		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'CanBePurchased'">
+		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'CanBePurchased'" style="z-index: 700;">
 			<view class="bg-red submit" @tap="showModal()">立即订购</view>
 		</view>
 		<!-- 已购买 审核中 -->
-		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'UndeReview'">
+		<view class="cu-bar bg-white tabbar border foot" v-if="memberOrderStatus == 'UndeReview'" style="z-index: 700;">
 			<view class="bg-red submit">{{tip}}</view>
 		</view>
 
 		<view class="cu-modal" :class="dialogModal" style="z-index: 900;">
-			<view class="cu-dialog">
+			<view class="cu-dialog bg-f06c7a">
 				<view class="cu-bar bg-f06c7a justify-end">
 					<input class="basis-lg" placeholder="请输入验证码" v-model="captchaCode" placeholder-style="color: rgba(255,255,255,0.8);" />
 					<image class="basis-sm pic-captcha margin-right" @click="getCaptchaCode()" :src="captcha.imageContent"></image>
@@ -60,8 +60,7 @@
 			}
 		},
 		async onLoad(RouterOptions) {
-			this.siteConfig = uni.getStorageSync('site_config');
-			console.log(this.siteConfig);
+			//console.log(this.siteConfig);
 			// 获取选择的类型
 			this.type = RouterOptions.type;
 			
@@ -86,7 +85,7 @@
 			
 		},
 		onShow() {
-			
+			this.siteConfig = uni.getStorageSync('site_config');
 		},
 		methods: {
 			async showModal() {
@@ -104,6 +103,14 @@
 				this.dialogModal = 'show';
 			},
 			async hideModal() {
+				if(this.captchaCode == ''){
+					uni.showToast({
+						icon: 'none',
+						title: '请输入验证码'
+					})	
+					return false;
+				}
+				
 				// 创建订单
 				let orderResponse = await memberOrder({
 					captcha_key: this.captcha.key,
@@ -144,7 +151,6 @@
 	.bg-f06c7a {
 		background-color: #f06c7a;
 		color: #ffffff;
-		height: 100%;
 	}
 	
 	.pic-captcha {

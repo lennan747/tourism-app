@@ -24,7 +24,7 @@
 
 <script>
 	import {
-		login
+		login,getUserInfo
 	} from '../../utils/api.js'
 	export default {
 		data() {
@@ -57,6 +57,8 @@
 				});
 				// 登录成功
 				if (loginResponse.statusCode === 200) {
+					// 获取用户信息
+					let userResponse = await getUserInfo();
 					uni.reLaunch({
 						url: '/'
 					});
