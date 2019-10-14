@@ -72,10 +72,14 @@
     },
     "h5" : {
         "devServer" : {
-            "port" : 8888
+            "port" : "",
+            "https" : false
         },
         "router" : {
-            "mode" : "history"
-        }
+            "mode" : "history",
+            "base" : "h"
+        },
+        "title" : "酱梓旅行",
+        "domain" : "mb.jiangzi20.com"
     }
 }

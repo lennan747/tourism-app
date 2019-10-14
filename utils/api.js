@@ -1,7 +1,15 @@
 // 网路请求
 import request from '../common/request/request.js'
 
-const api_host = 'http://tourism.cam/api/'
+let api_host = '';
+
+if(process.env.NODE_ENV === 'development'){
+    console.log('开发环境')
+	api_host = 'http://tourism.cam/api/'
+}else{
+    console.log('生产环境')
+	api_host = 'http://mb.jiangzi20.com/api/'
+}
 // 全局配置
 request.setConfig({
 	baseUrl: api_host,
