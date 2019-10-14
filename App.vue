@@ -12,29 +12,29 @@
 			...mapMutations(['config', 'user'])
 		},
 		onLaunch: function() {
-			// // 获取设备信息
-			// uni.getSystemInfo({
-			// 	success: function(e) {
-			// 		// #ifndef MP
-			// 		Vue.prototype.StatusBar = e.statusBarHeight;
-			// 		if (e.platform == 'android') {
-			// 			Vue.prototype.CustomBar = e.statusBarHeight + 50;
-			// 		} else {
-			// 			Vue.prototype.CustomBar = e.statusBarHeight + 45;
-			// 		};
-			// 		// #endif
-			// 		// #ifdef MP-WEIXIN
-			// 		Vue.prototype.StatusBar = e.statusBarHeight;
-			// 		let custom = wx.getMenuButtonBoundingClientRect();
-			// 		Vue.prototype.Custom = custom;
-			// 		Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-			// 		// #endif       
-			// 		// #ifdef MP-ALIPAY
-			// 		Vue.prototype.StatusBar = e.statusBarHeight;
-			// 		Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
-			// 		// #endif
-			// 	}
-			// })
+			// 获取设备信息
+			uni.getSystemInfo({
+				success: function(e) {
+					// #ifndef MP
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					if (e.platform == 'android') {
+						Vue.prototype.CustomBar = e.statusBarHeight + 50;
+					} else {
+						Vue.prototype.CustomBar = e.statusBarHeight + 45;
+					};
+					// #endif
+					// #ifdef MP-WEIXIN
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					let custom = wx.getMenuButtonBoundingClientRect();
+					Vue.prototype.Custom = custom;
+					Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+					// #endif       
+					// #ifdef MP-ALIPAY
+					Vue.prototype.StatusBar = e.statusBarHeight;
+					Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
+					// #endif
+				}
+			})
 		},
 		onShow: async function(RouterOptions) {
 			try {
@@ -51,21 +51,18 @@
 				}
 				
 				// 获取app配置
-				if (Object.keys(this.$store.state.config).length == 0) {
-					let configResponse = await appConfig();
-					if (configResponse.statusCode == 200) {
-						console.log('加载app配置...');
-						this.config(configResponse.data);
-					}
+				let configResponse = await appConfig();
+				if (configResponse.statusCode == 200) {
+					console.log('加载app配置...');
+					uni.setStorageSync('site_config', configResponse.data)
+					this.config(configResponse.data);
 				}
 				
 				// 获取用户信息
-				if (Object.keys(this.$store.state.userInfo).length == 0) {
-					let userResponse = await getUserInfo();
-					if (userResponse.statusCode === 200) {
-						console.log('加载用户信息...');
-						this.user(userResponse.data);
-					}
+				let userResponse = await getUserInfo();
+				if (userResponse.statusCode === 200) {
+					console.log('加载用户信息...');
+					this.user(userResponse.data);
 				}
 				
 				// 判断登录状态

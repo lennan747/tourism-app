@@ -32,21 +32,21 @@
 		</view>
 		<scroll-view scroll-y class="page">
 			<view v-for="(item,index) in 2" :key="index" v-if="index==TabCur" class="cu-list menu sm-border card-menu margin-top">
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+				<view class="cu-item" :class="menuArrow?'arrow':''" @tap="go(0)">
 					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
+						<!-- <image src="/static/logo.png" class="png" mode="aspectFit"></image> -->
 						<text class="text-grey">关于我们</text>
 					</view>
 				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+				<view class="cu-item" :class="menuArrow?'arrow':''" @tap="go(1)">
 					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
+						<!-- <image src="/static/logo.png" class="png" mode="aspectFit"></image> -->
 						<text class="text-grey">联系客服</text>
 					</view>
 				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+				<view class="cu-item" :class="menuArrow?'arrow':''" @tap="go(2)">
 					<view class="content">
-						<image src="/static/logo.png" class="png" mode="aspectFit"></image>
+						<!-- <image src="/static/logo.png" class="png" mode="aspectFit"></image> -->
 						<text class="text-grey">商务合作</text>
 					</view>
 				</view>
@@ -65,6 +65,7 @@
 				gridCol: 3,
 				gridBorder: false,
 				menuArrow: true,
+				goList:['/pages/aboutUs','/pages/consumer','/pages/businessCooperation'],
 				cuIconList: [{
 					cuIcon: 'goodsnewfill',
 					color: 'orange',
@@ -84,6 +85,13 @@
 					name: '通知',
 					url: '/pages/user/notices',
 				}],
+			}
+		},
+		methods:{
+			go(n){
+				uni.navigateTo({
+					url:this.goList[n]
+				})
 			}
 		}
 	}

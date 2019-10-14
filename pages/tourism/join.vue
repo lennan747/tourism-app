@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<view v-if="type == 'store'">
+		<view v-if="type == 'store'" class="margin bg-white">
 			<view v-html="managerIntroduction"></view>
 		</view>
-		<view v-if="type == 'player'">
+		<view v-if="type == 'player'" class="margin bg-white">
 			<view v-html="playerIntroduction"></view>
 		</view>
 		
@@ -47,18 +47,21 @@
 				type: 'store',
 				memberOrderInfo: {},
 				memberOrderStatus: 'NotBuying',
-				tip: '11'
+				tip: '11',
+				siteConfig: {},
 			}
 		},
 		computed: {
 		    managerIntroduction () {
-		      return this.$store.state.config.manager.extra
+		      return this.siteConfig.manager.extra
 		    },
 			playerIntroduction () {
-			  return this.$store.state.config.player.extra
+			  return this.siteConfig.player.extra
 			}
 		},
 		async onLoad(RouterOptions) {
+			this.siteConfig = uni.getStorageSync('site_config');
+			console.log(this.siteConfig);
 			// 获取选择的类型
 			this.type = RouterOptions.type;
 			
