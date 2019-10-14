@@ -109,7 +109,7 @@
 			//console.log(this.date);
 			// 从缓存中获取系统配置
 			let appConfig = uni.getStorageSync('site_config');
-			//console.log(appConfig);
+			console.log(appConfig);
 			// 从缓存中获取用户信息
 			let userInfo = uni.getStorageSync('user_info');
 			// 从缓存中获取提现信息

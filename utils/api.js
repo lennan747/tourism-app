@@ -5,7 +5,7 @@ let api_host = '';
 
 if(process.env.NODE_ENV === 'development'){
     console.log('开发环境')
-	api_host = 'http://mb.jiangzi20.com/api/'
+	api_host = 'http://tourism.cam/api/'
 }else{
     console.log('生产环境')
 	api_host = 'http://mb.jiangzi20.com/api/'
@@ -17,13 +17,11 @@ request.setConfig({
 
 // 设置请求拦截器
 request.interceptors.request(config => {
-	// return Promise.reject('error from request interceptors'); // 向外层抛出错误，用catch捕获
 	return config; // 返回修改后的配置，如未修改也需添加这行
 })
 
 // 设置响应拦截器
 request.interceptors.response(res => {
-	// 401 验证失败
 	
 	if(res.statusCode === 401){
 		uni.showToast({
@@ -52,9 +50,6 @@ request.interceptors.response(res => {
 			icon: "none"
 		});
 	}
-	// return false;    // 阻止返回,页面不会接收返回值
-	// return {message: '自定义值，来自拦截器'};   // 返回您自定义的值，将覆盖原始返回值
-	// return Promise.reject('error from response interceptors') // 向外层抛出错误，用catch捕获
 	return res; // 原样返回
 })
 
@@ -135,8 +130,7 @@ export async function bankList () {
 	}
 }
 
-
-// 添加银行卡
+// 删除银行卡
 export async function deletBankCard (id) {
 	try{
 		let response = await request.delete('bank/card/'+id,{
@@ -211,6 +205,7 @@ export async function editBankCard (datas) {
 		//TODO handle the exception
 	}
 }
+
 // 商品详情
 export async function getProductsOfDetails (datas) {
 	try{
@@ -229,7 +224,6 @@ export async function team () {
 				'Authorization': 'Bearer ' + await getToken()
 			}
 		})
-		
 		return response;
 	}catch(e){
 		//TODO handle the exception
@@ -301,7 +295,8 @@ export async function getUserInfo() {
 			'Authorization': 'Bearer ' + await getToken()
 		}
 	})
-	// 成功
+	
+	// 存入本地缓存
 	if(response.statusCode === 200){
 		uni.setStorageSync('user_info',response.data)
 	}
@@ -466,7 +461,11 @@ export async function registercaptcha (datas) {
 // 获取app配置
 export async function appConfig () {
 	try{
-		let response = await request.get('config')
+		let response = await request.get('config');
+		// 存入本地缓存
+		if(response.statusCode == 200){
+			uni.setStorageSync('site_config', response.data)
+		}
 		return response;
 	}catch(e){
 		//TODO handle the exception

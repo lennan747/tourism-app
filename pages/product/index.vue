@@ -110,7 +110,7 @@
 			
 			// 获取成功
 			if(productResponse.statusCode === 200){
-				console.log(productResponse);
+				//console.log(productResponse);
 				this.product = productResponse.data;
 				this.swiperList = productResponse.data['image']
 				this.tabList = [
@@ -135,7 +135,7 @@
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			checkSku(e) {
-				console.log(e);
+				//console.log(e);
 				this.product.title = e.target.dataset.name;
 				this.product.price = e.target.dataset.price;
 				this.SkuId = e.target.dataset.sku;
@@ -158,7 +158,7 @@
 				this.cardCur = e.detail.current
 			},
 			async showModal() {
-				console.log('打开模态窗');
+				//console.log('打开模态窗');
 				// 验证表单提交信息
 				if(!this.SkuId){
 					uni.showToast({

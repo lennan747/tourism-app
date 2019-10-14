@@ -89,6 +89,12 @@
 		    "style" : {
 				"navigationBarTitleText": "客服"
 			}
+		},
+		{
+		    "path" : "pages/help",
+		    "style" : {
+				"navigationBarTitleText": "帮助中心"
+			}
 		}
     ],
 	"globalStyle": {
