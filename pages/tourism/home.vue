@@ -2,11 +2,12 @@
 	<view>
 		<scroll-view scroll-y class="page">
 			<image 
-			src="/static/componentBg.png"
+			:src="indexBanner.image"
 			mode="widthFix" 
-			class="response">
+			class="response shadow-lg shadow-blur">
 			 </image>
-			<view class="nav-list">
+			 
+			<view class="nav-list margin-top">
 				<navigator hover-class="none" 
 				:url="'/pages/tourism/join?type=' + item.type" 
 				class="nav-li" 
@@ -19,7 +20,8 @@
 					<text :class="'cuIcon-' + item.cuIcon"></text>
 				</navigator>
 			</view>
-			<view class="cu-bar bg-white margin-top color-f06c7a">
+			
+			<view class="cu-bar bg-white color-f06c7a">
 				<view class="action">
 					<text class="cuIcon-title text-blue color-f06c7a"></text>旅游
 				</view>
@@ -41,7 +43,14 @@
 <script>
 	export default {
 		name: "basics",
-		props: ['products','elements']
+		props: ['products','elements'],
+		computed:{
+			indexBanner: function(){
+				let site_config = uni.getStorageSync('site_config');
+				//console.log(site_config);
+				return site_config.index_banner;
+			}
+		}
 	}
 </script>
 

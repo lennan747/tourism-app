@@ -3,7 +3,7 @@
 		<view class="bg-gradual-green padding shadow-blur">
 			<view class="flex solid-bottom align-center">
 				<view class="padding-sm margin-xs radius">
-					<view class="cu-avatar xl round margin" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg);"></view>
+					<view class="cu-avatar xl round margin" :style="`background-image: url(${userInfo.avatar})`"></view>
 					<view class="text-center text-sm round bg-white text-green">{{ userInfo.name }}</view>
 				</view>
 				<view class="padding-top-sm padding-bottom-sm margin-xs">
@@ -50,6 +50,12 @@
 						<text class="text-grey">商务合作</text>
 					</view>
 				</view>
+				<view class="cu-item" :class="menuArrow?'arrow':''" @tap="go(3)">
+					<view class="content">
+						<!-- <image src="/static/logo.png" class="png" mode="aspectFit"></image> -->
+						<text class="text-grey">帮助中心</text>
+					</view>
+				</view>
 			</view>
 			<view class="cu-tabbar-height"></view>
 		</scroll-view>
@@ -59,14 +65,14 @@
 <script>
 	export default {
 		name: "user",
-		props: ['datas'],
+		props: ['user','config'],
 		data() {
 			return {
 				TabCur: 0,
 				gridCol: 3,
 				gridBorder: false,
 				menuArrow: true,
-				goList:['/pages/aboutUs','/pages/consumer','/pages/businessCooperation'],
+				goList:['/pages/aboutUs','/pages/consumer','/pages/businessCooperation','/pages/help'],
 				cuIconList: [{
 					cuIcon: 'goodsnewfill',
 					color: 'orange',
@@ -89,12 +95,13 @@
 			}
 		},
 		computed:{
+			// 用户信息 
 			userInfo: function () {
-				//console.log(this.datas);
-				return this.datas
+				return this.user
 			}
 		},
 		methods:{
+			// 导航
 			go(n){
 				uni.navigateTo({
 					url:this.goList[n]

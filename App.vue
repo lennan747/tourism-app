@@ -1,81 +1,60 @@
 <script>
 	import Vue from 'vue'
 	import {
-		appConfig,
-		getUserInfo
+		appConfig
 	} from 'utils/api.js'
-	import {
-		mapMutations
-	} from 'vuex';
 	export default {
-		methods: {
-			...mapMutations(['config', 'user'])
-		},
-		onLaunch: function() {
-			// 获取设备信息
-			uni.getSystemInfo({
-				success: function(e) {
-					// #ifndef MP
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					if (e.platform == 'android') {
-						Vue.prototype.CustomBar = e.statusBarHeight + 50;
-					} else {
-						Vue.prototype.CustomBar = e.statusBarHeight + 45;
-					};
-					// #endif
-					// #ifdef MP-WEIXIN
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					let custom = wx.getMenuButtonBoundingClientRect();
-					Vue.prototype.Custom = custom;
-					Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
-					// #endif       
-					// #ifdef MP-ALIPAY
-					Vue.prototype.StatusBar = e.statusBarHeight;
-					Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
-					// #endif
-				}
-			})
-		},
-		onShow: async function(RouterOptions) {
+		onLaunch: async function(RouterOptions) {
 			try {
 				uni.showLoading({
 					title: '加载中...'
 				})
-				
-				// 处理用户来源 pid不存在且有pid
+				// 获取设备信息
+				uni.getSystemInfo({
+					success: function(e) {
+						// #ifndef MP
+						Vue.prototype.StatusBar = e.statusBarHeight;
+						if (e.platform == 'android') {
+							Vue.prototype.CustomBar = e.statusBarHeight + 50;
+						} else {
+							Vue.prototype.CustomBar = e.statusBarHeight + 45;
+						};
+						// #endif
+						// #ifdef MP-WEIXIN
+						Vue.prototype.StatusBar = e.statusBarHeight;
+						let custom = wx.getMenuButtonBoundingClientRect();
+						Vue.prototype.Custom = custom;
+						Vue.prototype.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+						// #endif       
+						// #ifdef MP-ALIPAY
+						Vue.prototype.StatusBar = e.statusBarHeight;
+						Vue.prototype.CustomBar = e.statusBarHeight + e.titleBarHeight;
+						// #endif
+					}
+				});
+
+				// 获取app配置 保存到缓存
+				let configResponse = await appConfig();
+
+				// 处理用户来源 邀请码
 				let invite_code = RouterOptions.query ? RouterOptions.query.invite_code : false;
 				let storage_invite_code = uni.getStorageSync('invite_code');
 				if (!storage_invite_code && invite_code) {
-					console.log('no parent, need save!');
+					//console.log('no parent, need save!');
 					uni.setStorageSync('invite_code', invite_code)
 				}
-				
-				// 获取app配置
-				let configResponse = await appConfig();
-				if (configResponse.statusCode == 200) {
-					console.log('加载app配置...');
-					uni.setStorageSync('site_config', configResponse.data)
-					this.config(configResponse.data);
-				}
-				
-				// 获取用户信息
-				let userResponse = await getUserInfo();
-				if (userResponse.statusCode === 200) {
-					console.log('加载用户信息...');
-					this.user(userResponse.data);
-				}
-				
+
 				// 判断登录状态
 				let token = uni.getStorageSync('access_token') || '';
 				if (!token) {
-					console.log('登录...');
+					//console.log('登录...');
 					uni.hideLoading();
 					uni.reLaunch({
 						url: '/pages/login/login'
 					});
 					return false;
 				}
-				
+
 				// 登录成功
 				uni.hideLoading();
 				uni.showToast({
@@ -86,6 +65,9 @@
 				console.log(e);
 				uni.hideLoading();
 			}
+		},
+		onShow: async function() {
+
 		},
 		onHide: function() {
 			console.log('App Hide')

@@ -19,6 +19,11 @@
 			<view class="password">
 				<input placeholder="请输入密码" v-model="passwd" password=true placeholder-style="color: rgba(255,255,255,0.8);" />
 			</view>
+			
+			<view class="code">
+				<input placeholder="邀请码" v-model="invite_code" placeholder-style="color: rgba(255,255,255,0.8);" />
+			</view>
+			
 			<view class="btn" @tap="doReg">立即注册</view>
 			<view class="res">
 				<view @tap="toLogin">已有账号立即登录</view>
@@ -46,7 +51,11 @@
 
 <script>
 	import md5 from "@/common/SDK/md5.min.js";
-	import { registercaptcha,verificationCodes,register } from '../../utils/api.js'
+	import {
+		registercaptcha,
+		verificationCodes,
+		register
+	} from '../../utils/api.js'
 	export default {
 		data() {
 			return {
@@ -60,15 +69,22 @@
 				getCodeBtnColor: "#ffffff",
 				getCodeisWaiting: false,
 				dialogModal: false,
+				invite_code: '',
 			}
 		},
 		onLoad() {
 			console.log('onLoad');
 		},
 		methods: {
+			// 验证密码
+			isPasswd(s) {
+				let patrn = /^(\w){6,20}$/;
+				if (!patrn.exec(s)) return false;
+				return true;
+			},
 			// 关闭模态框，检查图片验证情况，获取手机验证码
 			hideModal() {
-				console.log(this.captchaCode);
+				// 验证手机短信验证码
 				if (!this.captchaCode) {
 					uni.showToast({
 						icon: 'none',
@@ -77,7 +93,7 @@
 					});
 					return false;
 				}
-
+				// 验证码已过期
 				if (new Date().getTime() > new Date(this.captcha.expiredAt).getTime()) {
 					uni.showToast({
 						icon: 'none',
@@ -94,6 +110,7 @@
 				this.getCaptchaCode();
 			},
 			Timer() {},
+			// 重新获取验证码倒计时
 			setTimer() {
 				let holdTime = 60;
 				this.getCodeText = "重新获取(60)"
@@ -110,67 +127,6 @@
 
 				}, 1000)
 			},
-			async doReg() {
-				uni.hideKeyboard()
-				//模板示例部分验证规则
-				if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneNumber))) {
-					uni.showToast({
-						title: '请填写正确手机号码',
-						icon: "none"
-					});
-					return false;
-				}
-				//示例验证码，实际使用中应为请求服务器比对验证码是否正确。
-				if (this.code != 1234) {
-					uni.showToast({
-						title: '验证码不正确',
-						icon: "none"
-					});
-					return false;
-				}
-				uni.showLoading({
-					title: '提交中...'
-				})
-
-				// 提交到服务器
-				try {
-					uni.showLoading({
-						title: '注册中'
-					});
-					// 从缓存中获取上一级，不存在给0
-					let invite_code = uni.getStorageSync('invite_code') || "";
-					let registerResponse = await register({
-						invite_code: invite_code,
-						password: this.passwd,
-						verification_key: this.verificationCode.key,
-						verification_code: this.code,
-						})
-					if (registerResponse.statusCode === 422) {
-						uni.showToast({
-							title: '验证码已失效',
-							icon: "none"
-						});
-					}
-
-					if (registerResponse.statusCode === 401) {
-						uni.showToast({
-							title: '验证码错误',
-							icon: "none"
-						});
-					}
-					
-					// 注册成功
-					if(registerResponse.statusCode === 201){
-						uni.hideLoading()
-						uni.showToast({title: '注册成功',icon:"success"});
-						setTimeout(function(){
-							uni.navigateBack();
-						},1000)
-					}
-				} catch (e) {
-					//TODO handle the exception
-				}
-			},
 			toLogin() {
 				uni.hideKeyboard()
 				uni.redirectTo({
@@ -181,8 +137,11 @@
 			// 获取手机验证码
 			async sendPhoneCode() {
 				try {
-					let phoneCodeResponse = await verificationCodes({captcha_key: this.captcha.key,captcha_code: this.captchaCode})
-					console.log(phoneCodeResponse);
+					let phoneCodeResponse = await verificationCodes({
+						captcha_key: this.captcha.key,
+						captcha_code: this.captchaCode
+					})
+					// console.log(phoneCodeResponse);
 					if (phoneCodeResponse.statusCode === 401) {
 						uni.showToast({
 							icon: "none",
@@ -239,10 +198,12 @@
 					});
 
 					// 获取验证码数据
-					let captchaRespon = await registercaptcha({phoneNumber: this.phoneNumber});
-					
+					let captchaRespon = await registercaptcha({
+						phoneNumber: this.phoneNumber
+					});
+
 					console.log(captchaRespon);
-					
+
 					// 验证错误
 					if (captchaRespon.statusCode === 422) {
 						uni.hideLoading();
@@ -272,6 +233,84 @@
 						title: '服务器不见了',
 						duration: 2000
 					});
+				}
+			},
+			// 注册
+			async doReg() {
+				uni.hideKeyboard()
+				// 验证手机号
+				if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneNumber))) {
+					uni.showToast({
+						title: '请填写正确手机号码',
+						icon: "none"
+					});
+					return false;
+				}
+				// 验证密码
+				if (!this.isPasswd(this.passwd)) {
+					console.log();
+					uni.showToast({
+						title: '密码不符合规则',
+						icon: "none"
+					});
+					return false;
+				}
+				// 验证验证码
+				if (this.code != 1234) {
+					uni.showToast({
+						title: '验证码不正确',
+						icon: "none"
+					});
+					return false;
+				}
+
+				// 提交到服务器
+				try {
+					uni.showLoading({
+						title: '注册中'
+					});
+					
+					// 从缓存中获取上一级，不存在给0
+					if(!this.invite_code || this.invite_code == ''){
+						console.log(this.invite_code);
+						this.invite_code = uni.getStorageSync('invite_code') || "";
+					}
+				
+					let registerResponse = await register({
+						invite_code: this.invite_code,
+						password: this.passwd,
+						verification_key: this.verificationCode.key,
+						verification_code: this.code,
+					})
+
+					if (registerResponse.statusCode === 422) {
+						uni.showToast({
+							title: '验证码或者邀请码错误',
+							icon: "none"
+						});
+					}
+
+					if (registerResponse.statusCode === 401) {
+						uni.showToast({
+							title: '验证码错误',
+							icon: "none"
+						});
+					}
+
+					// 注册成功
+					if (registerResponse.statusCode === 201) {
+						uni.hideLoading()
+						uni.showToast({
+							title: '注册成功',
+							icon: "success"
+						});
+						setTimeout(function() {
+							uni.navigateBack();
+						}, 1000)
+					}
+				} catch (e) {
+					console.log(e);
+					//TODO handle the exception
 				}
 			}
 		}

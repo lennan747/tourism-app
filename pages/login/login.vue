@@ -40,12 +40,25 @@
 				uni.hideKeyboard()
 				uni.navigateTo({url: page});
 			},
+			isPasswd(s){
+				let patrn = /^(\w){6,20}$/;
+				if(!patrn.exec(s)) return false;
+				return true;
+			},
 			async doLogin() {
 				uni.hideKeyboard();
 				//验证手机号码
 				if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phoneNumber))) {
 					uni.showToast({
 						title: '请填写正确手机号码',
+						icon: "none"
+					});
+					return false;
+				}
+				// 密码验证
+				if(!this.isPasswd(this.passwd)){
+					uni.showToast({
+						title: '请填写正确的密码',
 						icon: "none"
 					});
 					return false;
@@ -57,13 +70,11 @@
 				});
 				// 登录成功
 				if (loginResponse.statusCode === 200) {
-					// 获取用户信息
-					let userResponse = await getUserInfo();
 					uni.reLaunch({
 						url: '/'
 					});
 				}
-				// 登录成功
+				// 登录失败
 				if (loginResponse.statusCode === 401) {
 					uni.showToast({
 						title: loginResponse.message,
