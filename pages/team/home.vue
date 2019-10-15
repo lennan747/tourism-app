@@ -5,32 +5,37 @@
 				<view class="flex solid-bottom align-center">
 					<view class="margin padding-lr text-sm">
 						<view class="text-center" @click="erweima">
-							<view class="text-red cuIcon-qrcode" style="font-size: 100upx;"></view>
+							<view class="text-white cuIcon-qrcode" style="font-size: 100upx;"></view>
 							<view class="text-sm">推广二维码</view>
 						</view>
 					</view>
 					<view class="text-sm radius">
 						<view class="padding-lr">
-							<view class="text-sm margin-tb-sm"><text class="padding-sm text-red">邀请码</text><text>{{teams.invite_code.code}}</text></view>
-							<view class="text-sm margin-tb-sm" v-if="userInfo.parent"><text class="padding-sm text-red">邀请人</text><text>{{ userInfo.parent.name}}</text></view>
+							<view class="text-sm margin-tb-sm">
+								<text class="padding-sm text-white">邀请码</text><text>{{teams.invite_code.code}}</text>
+							</view>
+							<view class="text-sm margin-tb-sm" v-if="userInfo.parent">
+								<text class="padding-sm text-white">邀请人</text><text>{{ userInfo.parent.name}}</text>
+							</view>
 						</view>
 					</view>
 				</view>
 				<view class="cu-list grid col-3 no-border">
-					<view class="cu-item">
-						<view class="nav-title text-red">{{ upgrade[userInfo.identity] }}</view>
-						<view class="margin-top-sm text-sm text-black">你的等级</view>
-					</view>
+				
 					<view class="cu-item" v-if="upgrade[userInfo.identity] != 'player'">
-						<view class="nav-title text-red">¥{{ commissionsCount.store_d + commissionsCount.store_t }}</view>
+						<view class="nav-title text-green">¥{{ commissionsCount.store_d + commissionsCount.store_t }}</view>
 						<view class="margin-top-sm text-sm text-black">团队奖励</view>
 					</view>
 					<view class="cu-item" v-if="upgrade[userInfo.identity] == 'player'">
-						<view class="nav-title text-red">¥{{ commissionsCount.player}}</view>
+						<view class="nav-title text-green">¥{{ commissionsCount.player}}</view>
 						<view class="margin-top-sm text-sm text-black">团队奖励</view>
 					</view>
 					<view class="cu-item">
-						<view class="nav-title text-red">¥{{ commissionsCount.tourism_d + commissionsCount.tourism_t }}</view>
+						<view class="nav-title text-green">{{ upgrade[userInfo.identity] }}</view>
+						<view class="margin-top-sm text-sm text-black">你的等级</view>
+					</view>
+					<view class="cu-item">
+						<view class="nav-title text-green">¥{{ commissionsCount.tourism_d + commissionsCount.tourism_t }}</view>
 						<view class="margin-top-sm text-sm text-black">收客奖励</view>
 					</view>
 					
@@ -38,13 +43,13 @@
 			</view>
 
 			<scroll-view scroll-x class="bg-white nav text-center">
-				<view class="cu-item" :class="'teams' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="teams">
+				<view class="cu-item" :class="'teams' == TabCur ? 'text-green cur' : ''" @tap="tabSelect" data-id="teams">
 					<text class="cuIcon-group"></text>人员({{ teamsCount }}人)
 				</view>
-				<view class="cu-item" :class="'orders' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="orders">
+				<view class="cu-item" :class="'orders' == TabCur ? 'text-green cur' : ''" @tap="tabSelect" data-id="orders">
 					<text class="cuIcon-sort"></text>订单({{ ordersCount }}笔)
 				</view>
-				<view class="cu-item" :class="'commissions' == TabCur ? 'text-red cur' : ''" @tap="tabSelect" data-id="commissions">
+				<view class="cu-item" :class="'commissions' == TabCur ? 'text-green cur' : ''" @tap="tabSelect" data-id="commissions">
 					<text class="cuIcon-selectionfill"></text>奖励({{ commissionsCount.count }}条)
 				</view>
 			</scroll-view>
@@ -120,8 +125,8 @@
 					</view>
 					<view class="padding-xl bg-white">
 						<view class="flex justify-between">
-							<view class="margin-left padding-sm text-center bg-red radius" @tap="go(0)">成为门店经理</view>
-							<view class="margin-right padding-sm text-center bg-red radius" @tap="go(1)">成为酱紫玩家</view>
+							<view class="margin-left padding-sm text-center bg-green radius" @tap="go(0)">成为门店经理</view>
+							<view class="margin-right padding-sm text-center bg-green radius" @tap="go(1)">成为酱紫玩家</view>
 						</view>
 					</view>
 				</view>
@@ -299,6 +304,8 @@
 				if (process.env.NODE_ENV === 'development') {
 					console.log('开发环境')
 					this.bgUrl= '/h/static/bgshare.jpg'
+					let site_config = uni.getStorageSync('site_config')
+					this.bgUrl = site_config.share_poster_bg.image
 				} else {
 					console.log('生产环境')
 					let site_config = uni.getStorageSync('site_config')

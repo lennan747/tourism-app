@@ -53,13 +53,20 @@
 				</view>
 			</form>
 		</view>
-		<view class="text-left padding-lr margin text-sm text-center text-gray">
+		<view class="padding margin text-sm text-gray bg-white radius">
 			<view class="padding-bottom-sm text-center text-red">提现须知</view>
-			<view class="padding-bottom-sm text-center">每次提现不得超过{{ withdraw_amount }}￥</view>
-			<view class="padding-bottom-sm text-center">每月{{ bank_rate }}日可提现</view>
-			<view class="padding-bottom-sm text-center">提现费率为 {{ bank_rate }}%</view>
-			<view class="padding-bottom-sm text-center">提现金额必须大于1块</view>
-			<view class="padding-bottom-sm text-center">请选择可用提现账户</view>
+			<view class="padding-bottom-sm text-left padding-lr-xl"><text class="cuIcon-title"></text>每次提现不得超过{{ withdraw_amount }}￥</view>
+			<view class="padding-bottom-sm text-left padding-lr-xl"><text class="cuIcon-title"></text>每月{{ bank_rate }}日可提现</view>
+			<view class="padding-bottom-sm text-left padding-lr-xl"><text class="cuIcon-title"></text>提现费率为 {{ bank_rate }}%</view>
+			<view class="padding-bottom-sm text-left padding-lr-xl"><text class="cuIcon-title"></text>提现金额必须大于1块</view>
+			<view class="padding-bottom-sm text-left padding-lr-xl"><text class="cuIcon-title"></text>请选择可用提现账户</view>
+		</view>
+		<view class="cu-modal" :class="modalName=='Modal'?'show':''">
+			<view class="cu-dialog">
+				<view class="bg-red">
+					<navigator class="padding btn" url="/pages/user/editcard?type=add"> <text>添加提现账户管理</text></navigator>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -73,9 +80,7 @@
 		data() {
 			return {
 				banks: [{
-					account: '111'
-				}, {
-					account: '111'
+					account: '暂无银行卡空'
 				}],
 				type: {
 					wechat: '微信',
@@ -101,6 +106,7 @@
 				}, ],
 				withdrawed: false,
 				show: true,
+				modalName: false
 			}
 		},
 		async onShow() {
@@ -150,9 +156,14 @@
 			// 加载银行卡
 			async loadData() {
 				let response = await bankList();
-				if (response) {
+				if(Object.keys(response.data).length == 0){
+					this.modalName = 'Modal';
+					return false;
+				}
+				if (response && Object.keys(response.data).length > 0) {
+					console.log(response)
+					this.modalName = false;
 					this.banks = response.data;
-					console.log(this.banks);
 				}
 			},
 			PickerChange(e) {
@@ -195,12 +206,14 @@
 					})
 					return false;
 				}
+				
+				// 提现
 				let response = await createWithdraw({
 					application_amount: this.application_amount,
 					bank_card_id: this.banks[this.index].id
 				});
-				console.log(response);
-				if (response) {
+				//console.log(response);
+				if (response.statusCode == 201) {
 					this.withdrawed = response.data.withdraw;
 					this.show = false;
 					uni.setStorageSync('withdrawed',this.withdrawed);

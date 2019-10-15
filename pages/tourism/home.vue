@@ -21,9 +21,9 @@
 				</navigator>
 			</view>
 			
-			<view class="cu-bar bg-white color-f06c7a">
+			<view class="cu-bar bg-white text-green">
 				<view class="action">
-					<text class="cuIcon-title text-blue color-f06c7a"></text>旅游
+					<text class="cuIcon-title text-green"></text>旅游
 				</view>
 			</view>
 			
@@ -47,7 +47,7 @@
 		computed:{
 			indexBanner: function(){
 				let site_config = uni.getStorageSync('site_config');
-				//console.log(site_config);
+				console.log(site_config);
 				return site_config.index_banner;
 			}
 		}

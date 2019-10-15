@@ -3,7 +3,7 @@
 		<view class="cu-list menu-avatar margin">
 			<view class="cu-item" :class="modalName=='move-box-'+ index?'move-cur':''" v-for="(item,index) in bankList" :key="index"
 			 @touchstart="ListTouchStart" @touchmove="ListTouchMove" @touchend="ListTouchEnd" :data-target="'move-box-' + index">
-				<view class="cu-avatar lg bg-white" :style="[{backgroundImage:'url(/static/'+ item.type +'.png)'}]"></view>
+				<view class="cu-avatar lg bg-white" :style="[{backgroundImage:'url(/h/static/'+ item.type +'.png)'}]"></view>
 				<view class="content">
 					<view class="text-xxl padding-lr">{{item.account}}</view>
 					<view class="flex justify-between margin-top-sm text-gray">
@@ -71,7 +71,7 @@
 			// 添加银行卡
 			add(){
 				uni.navigateTo({
-					url:"/pages/user/editcard?type=add"
+					url:"/pages/user/reflectdo"
 				})
 			},
 			

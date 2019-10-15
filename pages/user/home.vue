@@ -57,41 +57,48 @@
 					</view>
 				</view>
 			</view>
+			
 			<view class="cu-tabbar-height"></view>
+			<view class="padding-sm text-center margin radius bg-green text-white" @tap="exit()">退出</view>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
+	import {
+		appConfig
+	} from 'utils/api.js'
 	export default {
 		name: "user",
 		props: ['user','config'],
 		data() {
 			return {
 				TabCur: 0,
-				gridCol: 3,
+				gridCol: 2,
 				gridBorder: false,
 				menuArrow: true,
 				goList:['/pages/aboutUs','/pages/consumer','/pages/businessCooperation','/pages/help'],
 				cuIconList: [{
 					cuIcon: 'goodsnewfill',
-					color: 'orange',
+					color: 'olive',
 					badge: false,
 					name: '订单',
 					url: '/pages/user/orders',
 				}, {
 					cuIcon: 'profilefill',
-					color: 'yellow',
+					color: 'olive',
 					badge: false,
 					name: '提现',
 					url: '/pages/user/reflects',
-				}, {
-					cuIcon: 'noticefill',
-					color: 'olive',
-					badge: false,
-					name: '通知',
-					url: '/pages/user/notices',
-				}],
+				}, 
+				// {
+				// 	cuIcon: 'noticefill',
+				// 	color: 'olive',
+				// 	badge: false,
+				// 	name: '通知',
+				// 	url: '/pages/user/notices',
+				// },
+				],
 			}
 		},
 		computed:{
@@ -106,6 +113,16 @@
 				uni.navigateTo({
 					url:this.goList[n]
 				})
+			},
+			// 退出登录
+			async exit(){
+				uni.clearStorage();
+				// 获取app配置 保存到缓存
+				let configResponse = await appConfig();
+				
+				uni.reLaunch({
+					url: '/pages/login/login',
+				});
 			}
 		}
 	}

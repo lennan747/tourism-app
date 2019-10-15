@@ -54,7 +54,7 @@
 			</view>
 		</view>
 		<!-- 未购买 购买按钮 -->
-		<view class="cu-bar bg-white tabbar border foot">
+		<view class="cu-bar bg-white tabbar border foot" style="z-index: 800;">
 			<view class="bg-red submit" @tap="showModal()">立即订购</view>
 		</view>
 
@@ -202,6 +202,9 @@
 						title: '下单成功',
 						icon: "success"
 					});
+					uni.navigateTo({
+						url: '/pages/user/orders'
+					})
 				}
 				this.dialogModal = false;
 			},

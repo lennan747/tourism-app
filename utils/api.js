@@ -6,6 +6,7 @@ let api_host = '';
 if(process.env.NODE_ENV === 'development'){
     console.log('开发环境')
 	api_host = 'http://tourism.cam/api/'
+	//api_host = 'http://mb.jiangzi20.com/api/'
 }else{
     console.log('生产环境')
 	api_host = 'http://mb.jiangzi20.com/api/'
@@ -408,6 +409,25 @@ export async function refreshToken(accessToken) {
 	return response;
 }
 
+
+export async function resetpasswd (datas) {
+	try{
+		let response = await request.post('users/reset_password', {
+			data: {
+				password: datas.password,
+				verification_key: datas.verification_key,
+				verification_code: datas.verification_code
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+
+// 注册
 export async function register (datas) {
 	try{
 		let response = await request.post('users', {
@@ -443,11 +463,28 @@ export async function verificationCodes (datas) {
 }
 
 // 获取图片注册验证码
+export async function resetpasswordcaptcha (datas) {
+	try{
+		let response = await request.post('captchas/register', {
+			data: {
+				phone: datas.phoneNumber,
+				type: 'reset_password'
+			}
+		})
+		
+		return response;
+	}catch(e){
+		//TODO handle the exception
+		console.log(e);
+	}
+}
+// 获取图片注册验证码
 export async function registercaptcha (datas) {
 	try{
-		let response = await request.post('captchas', {
+		let response = await request.post('captchas/register', {
 			data: {
-				phone: datas.phoneNumber
+				phone: datas.phoneNumber,
+				type: 'register'
 			}
 		})
 		

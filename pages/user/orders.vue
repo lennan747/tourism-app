@@ -33,7 +33,7 @@
 						<!-- 订单商品列表 -->
 						<scroll-view v-if="item.items.length > 1" class="goods-box" scroll-x>
 							<!-- <image class="goods-img" :src="'http://tourism.cam/uploads/' + goodsItem.product.index_image" mode="aspectFill"></image> -->
-							<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" :style="{'background-image':'url(http://tourism.cam/uploads/'+goodsItem.product.index_image+')'}">
+							<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" :style="{'background-image':'url(http://mb.jiangzi20.com/uploads/'+goodsItem.product.index_image+')'}">
 								<view>{{goodsItem.product.title}}</view>
 							</view>
 							<view class="flex">
@@ -45,7 +45,7 @@
 						
 						<view v-if="item.items.length === 1" class="padding-lr-xl text-center" v-for="(goodsItem, goodsIndex) in item.items" :key="goodsIndex">
 							<!-- <image class="goods-img" :src="'http://tourism.cam/uploads/' + goodsItem.product.index_image" mode="aspectFill"></image> -->
-							<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" :style="{'background-image':'url(http://tourism.cam/uploads/'+goodsItem.product.index_image+')'}">
+							<view class="padding-xl radius shadow-blur bg-red margin-top bg-img" :style="{'background-image':'url(http://mb.jiangzi20.com/uploads/'+goodsItem.product.index_image+')'}">
 								<view>{{goodsItem.product.title}}</view>
 							</view>
 							<view class="flex justify-around margin-top-sm">
@@ -147,6 +147,7 @@
 		methods: {
 			//获取订单列表
 			async loadData(source){
+				console.log(source);
 				//这里是将订单挂载到tab列表下
 				let index = this.tabCurrentIndex;
 				let navItem = this.navList[index];

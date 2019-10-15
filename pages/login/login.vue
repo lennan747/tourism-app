@@ -16,7 +16,7 @@
 			<view class="btn" @tap="doLogin">登 录</view>
 			<view class="res">
 				<view @tap="toPage('register')">用户注册</view>
-				<!-- <view @tap="toPage('resetpasswd')">忘记密码</view> -->
+				<view @tap="toPage('resetpasswd')">忘记密码</view>
 			</view>
 		</view>
 	</view>
@@ -77,7 +77,7 @@
 				// 登录失败
 				if (loginResponse.statusCode === 401) {
 					uni.showToast({
-						title: loginResponse.message,
+						title: loginResponse.data.message,
 						icon: 'none'
 					})
 				}
